@@ -42,6 +42,12 @@ void main() {
       expect(() => takaToMinor('1234567890123'), throwsFormatException);
     });
 
+    test('parses Bangla digits', () {
+      expect(takaToMinor('১২৩'), 12300);
+      expect(takaToMinor('৮৫০'), 85000);
+      expect(takaToMinor('৩.৫০'), 350);
+    });
+
     test('rejects malformed or negative amounts', () {
       for (final bad in [
         '',
@@ -52,7 +58,6 @@ void main() {
         '.',
         '.5',
         '1.2.3',
-        '১২৩',
       ]) {
         expect(
           () => takaToMinor(bad),
