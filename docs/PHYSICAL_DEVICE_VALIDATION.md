@@ -289,10 +289,18 @@ non-blocking follow-up and was **not** marked PASS.
 - This closure record: pushed to `feature/android-owner-mvp` with CI
   verified before merge to `main` (merge record appended below).
 
-## Branch state (as of this checkpoint)
+## Branch state (final)
 
 | Branch | State |
 |---|---|
-| `main` | Product foundation (business profile, adaptive domain models, Songjog docs). Not merged with the MVP work yet; merging the milestone into `main` is the next release decision after physical-device validation. |
-| `feature/android-owner-mvp` | Active working branch — contains everything: foundation, export/diagnostic implementation, tests, Android scaffold, CI. |
+| `main` | Canonical. Contains the full physical-device-validated milestone (merge commit `e3a1c16`, PR #7). |
+| `feature/android-owner-mvp` | Completed — merged into `main` via PR #7; deleted after full containment verification (all commits present in `main`). |
 | `foundation/product-spec` | Deleted 2026-08-26 after re-verifying that all of its commits were contained in `feature/android-owner-mvp` (PR #1 had been closed without merging). |
+
+## Merge record
+
+- PR: [#7](https://github.com/soobujmiah/songjog/pull/7) — "Merge physical-device validated MVP into main"
+- Merged: 2026-08-26 via normal merge commit (no force-push, no history rewrite)
+- Merge commit: `e3a1c160257b3661a235509bff3ee14f7cc39ffe` (parents `b532e7a` + `159c8c7`)
+- Post-merge CI on `main`: run [32971289199](https://github.com/soobujmiah/songjog/actions/runs/32971289199) — all jobs success
+- Containment verified: feature tip `159c8c7` is an ancestor of `main`; merge tree identical to the feature tip tree.
