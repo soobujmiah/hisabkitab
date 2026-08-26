@@ -1,5 +1,7 @@
+import 'export_type.dart';
+
 String exportFilename({
-  required String kind,
+  required ExportType type,
   required DateTime createdAt,
   String extension = 'json',
 }) {
@@ -10,5 +12,9 @@ String exportFilename({
       '${utc.hour.toString().padLeft(2, '0')}'
       '${utc.minute.toString().padLeft(2, '0')}'
       '${utc.second.toString().padLeft(2, '0')}';
+  final kind = switch (type) {
+    ExportType.userData => 'data',
+    ExportType.diagnostic => 'diagnostics',
+  };
   return 'songjog_${kind}_$stamp.$extension';
 }
