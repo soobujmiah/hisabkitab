@@ -1,0 +1,117 @@
+import 'package:flutter/material.dart';
+
+import '../../application/onboarding/onboarding_service.dart';
+import '../../application/onboarding/workspace_fields.dart';
+import '../../domain/models/business_profile.dart';
+import '../l10n/app_text.dart';
+
+class OnboardingScreen extends StatefulWidget {
+  const OnboardingScreen({super.key, required this.service, this.locale = AppLocale.bangla});
+
+  final OnboardingService service;
+  final AppLocale locale;
+
+  @override
+  State<OnboardingScreen> createState() => _OnboardingScreenState();
+}
+
+class _OnboardingScreenState extends State<OnboardingScreen> {
+  final _name = TextEditingController();
+  final _phone = TextEditingController();
+  final _address = TextEditingController();
+  final _subtype = TextEditingController();
+  WorkspaceKind _workspaceKind = WorkspaceKind.business;
+  BusinessType _businessType = BusinessType.retail;
+  bool _saving = false;
+
+  String t(String key) => AppText.get(widget.locale, key);
+
+  @override
+  void dispose() {
+    _name.dispose();
+    _phone.dispose();
+    _address.dispose();
+    _subtype.dispose();
+    super.dispose();
+  }
+
+  Future<void> _save() async {
+    setState(() => _saving = true);
+    try {
+      await widget.service.createOwnerWorkspace(
+        name: _name.text,
+        workspaceKind: _workspaceKind,
+        businessType: _businessType,
+        phone: _phone.text,
+        address: _address.text,
+        subtype: _subtype.text,
+      );
+      if (mounted) Navigator.of(context).pop(true);
+    } on ArgumentError catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(error.message?.toString() ?? '')),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _saving = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final fields = WorkspaceFieldRegistry.forBusinessType(_businessType).fields;
+    return Scaffold(
+      appBar: AppBar(title: Text(t('workspace_title'))),
+      body: SafeArea(
+        child: ListView(
+          padding: const EdgeInsets.all(24),
+          children: [
+            Text(t('workspace_name'), style: Theme.of(context).textTheme.labelLarge),
+            const SizedBox(height: 8),
+            TextField(controller: _name, textInputAction: TextInputAction.next),
+            const SizedBox(height: 20),
+            DropdownButtonFormField<WorkspaceKind>(
+              initialValue: _workspaceKind,
+              decoration: InputDecoration(labelText: t('workspace_type')),
+              items: WorkspaceKind.values.map((kind) => DropdownMenuItem(
+                value: kind,
+                child: Text(kind.name),
+              )).toList(),
+              onChanged: (value) => setState(() => _workspaceKind = value!),
+            ),
+            const SizedBox(height: 20),
+            DropdownButtonFormField<BusinessType>(
+              initialValue: _businessType,
+              decoration: InputDecoration(labelText: t('business_type')),
+              items: BusinessType.values.map((type) => DropdownMenuItem(
+                value: type,
+                child: Text(type.name),
+              )).toList(),
+              onChanged: (value) => setState(() => _businessType = value!),
+            ),
+            const SizedBox(height: 20),
+            if (fields.contains(OnboardingField.phone)) ...[
+              TextField(controller: _phone, keyboardType: TextInputType.phone,
+                decoration: InputDecoration(labelText: t('phone'))),
+              const SizedBox(height: 16),
+            ],
+            if (fields.contains(OnboardingField.address)) ...[
+              TextField(controller: _address, decoration: InputDecoration(labelText: t('address'))),
+              const SizedBox(height: 16),
+            ],
+            if (fields.contains(OnboardingField.subtype)) ...[
+              TextField(controller: _subtype, decoration: InputDecoration(labelText: t('subtype'))),
+              const SizedBox(height: 16),
+            ],
+            const SizedBox(height: 12),
+            FilledButton(
+              onPressed: _saving ? null : _save,
+              child: Text(_saving ? '…' : t('continue')),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
