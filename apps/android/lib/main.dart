@@ -1,81 +1,66 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(const SongjogApp());
+import 'app/app_services.dart';
+import 'l10n/app_text.dart';
+import 'presentation/welcome/welcome_page.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final services = await AppServices.create();
+  _installGlobalErrorHandlers(services);
+
+  runApp(SongjogApp(services: services));
+}
+
+/// Routes uncaught framework and platform errors into the diagnostic
+/// collector so they appear in the diagnostic export without masking the
+/// default handling.
+void _installGlobalErrorHandlers(AppServices services) {
+  final diagnostics = services.diagnostics;
+
+  FlutterError.onError = (details) {
+    diagnostics.record(
+      level: 'error',
+      category: 'render',
+      operation: 'flutter_error',
+      message: details.exceptionAsString(),
+      error: details.exceptionAsString(),
+      stackTrace: details.stack?.toString(),
+    );
+    FlutterError.presentError(details);
+  };
+
+  PlatformDispatcher.instance.onError = (error, stack) {
+    diagnostics.record(
+      level: 'error',
+      category: 'other',
+      operation: 'unhandled_exception',
+      message: error.toString(),
+      stackTrace: stack.toString(),
+    );
+    return true;
+  };
+}
 
 class SongjogApp extends StatelessWidget {
-  const SongjogApp({super.key});
+  const SongjogApp({super.key, required this.services, this.locale = AppLocale.bangla});
+
+  final AppServices services;
+  final AppLocale locale;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Songjog',
+      title: AppText.get(locale, 'app_name'),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
         colorSchemeSeed: const Color(0xFF126B5A),
         scaffoldBackgroundColor: const Color(0xFFF7F8F6),
       ),
-      home: const WelcomePage(),
-    );
-  }
-}
-
-class WelcomePage extends StatelessWidget {
-  const WelcomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Spacer(),
-              const Icon(Icons.account_balance_wallet_rounded, size: 72),
-              const SizedBox(height: 24),
-              Text(
-                'Songjog',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                      fontWeight: FontWeight.w800,
-                    ),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                'আপনার ব্যবসার হিসাব, এক জায়গায়।',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              const SizedBox(height: 12),
-              Text(
-                'বিক্রি, বাকি, খরচ ও লাভ—সহজভাবে।',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              const Spacer(),
-              FilledButton(
-                onPressed: () {},
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 14),
-                  child: Text('অ্যাকাউন্ট খুলুন'),
-                ),
-              ),
-              const SizedBox(height: 12),
-              OutlinedButton(
-                onPressed: () {},
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 14),
-                  child: Text('লগইন'),
-                ),
-              ),
-              const SizedBox(height: 12),
-              TextButton(onPressed: () {}, child: const Text('অ্যাপটি ঘুরে দেখুন')),
-            ],
-          ),
-        ),
-      ),
+      home: WelcomePage(services: services, locale: locale),
     );
   }
 }

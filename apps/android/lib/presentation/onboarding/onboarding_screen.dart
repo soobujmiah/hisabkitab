@@ -3,13 +3,20 @@ import 'package:flutter/material.dart';
 import '../../application/onboarding/onboarding_service.dart';
 import '../../application/onboarding/workspace_fields.dart';
 import '../../domain/models/business_profile.dart';
+import '../../domain/services/diagnostic_collector.dart';
 import '../../l10n/app_text.dart';
 
 class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({super.key, required this.service, this.locale = AppLocale.bangla});
+  const OnboardingScreen({
+    super.key,
+    required this.service,
+    this.locale = AppLocale.bangla,
+    this.diagnostics,
+  });
 
   final OnboardingService service;
   final AppLocale locale;
+  final DiagnosticCollector? diagnostics;
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
@@ -38,7 +45,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Future<void> _save() async {
     setState(() => _saving = true);
     try {
-      await widget.service.createOwnerWorkspace(
+      final profile = await widget.service.createOwnerWorkspace(
         name: _name.text,
         workspaceKind: _workspaceKind,
         businessType: _businessType,
@@ -46,8 +53,26 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         address: _address.text,
         subtype: _subtype.text,
       );
+      widget.diagnostics?.record(
+        level: 'info',
+        category: 'onboarding',
+        operation: 'onboarding_save',
+        message: 'owner workspace created',
+        details: {
+          'workspace_kind': profile.workspaceKind.name,
+          'business_type': profile.businessType.name,
+        },
+      );
       if (mounted) Navigator.of(context).pop(true);
-    } on ArgumentError catch (error) {
+    } on ArgumentError catch (error, stack) {
+      widget.diagnostics?.record(
+        level: 'error',
+        category: 'onboarding',
+        operation: 'onboarding_save',
+        message: 'onboarding save rejected',
+        error: error.toString(),
+        stackTrace: stack.toString(),
+      );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(error.message?.toString() ?? '')),
