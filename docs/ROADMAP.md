@@ -1,11 +1,13 @@
-# HisabKitab Roadmap
+# Songjog Roadmap
+
+Songjog is the canonical product identity. HisabKitab is retained only as historical migration terminology.
 
 ## Phase 0 — Foundation
 
 - product specification
 - UX/motion system
 - architecture
-- business-type configuration
+- configurable organization types
 - data model
 - security model
 - CI/toolchain policy
@@ -13,24 +15,25 @@
 
 **Exit gate:** documentation reviewed and implementation boundaries agreed.
 
-## Phase 1 — Usable bookkeeping MVP
+## Phase 1 — Usable owner MVP
 
 - welcome/login/create account
-- business setup
-- business type
+- organization setup
+- configurable organization type
 - dashboard shell
-- customers
-- suppliers
-- products
-- sales
+- people/relationships
+- products/services
+- sales/service transactions
 - expenses
 - payments
-- customer/supplier ledger
+- ledgers
 - basic reports
 - receipt generation
 - local persistence
+- mandatory user-data export
+- mandatory diagnostic export
 
-**Exit gate:** a user can run a basic business day without paper for core transactions.
+**Exit gate:** a user can run a basic operational day without paper for core workflows.
 
 ## Phase 2 — Inventory & documents
 
@@ -49,32 +52,39 @@
 - authenticated cloud sync
 - backup/restore
 - multi-device support
-- staff roles
+- staff/team roles
 - audit trail
 - notification system
 
-## Phase 4 — Business intelligence
+## Phase 4 — Domain modules
+
+- education/training workflows
+- student/guardian relationships
+- notices, results, certificates, testimonials, custom documents
+- healthcare workflows including beds, patients, ambulance, billing, receipts, and operational records
+
+## Phase 5 — Business intelligence
 
 - richer reports
 - trend comparisons
-- product/customer profitability
+- profitability
 - business health dashboard
 - scheduled summaries
 
-## Phase 5 — AI assistance
+## Phase 6 — AI assistance
 
 - Bangla voice entry
 - natural-language reports
 - AI-assisted reminders and descriptions
 - anomaly explanations
 
-AI must remain an assistive layer; deterministic transaction records remain authoritative.
+AI remains assistive; deterministic records remain authoritative.
 
-## Phase 6 — Commercial scale
+## Phase 7 — Commercial scale
 
 - subscriptions
 - premium feature gating
-- business plans
+- organization plans
 - onboarding experiments
 - referral mechanisms
 - support/feedback loop
