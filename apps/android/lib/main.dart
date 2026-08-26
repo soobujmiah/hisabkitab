@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(const HisabKitabApp());
+void main() => runApp(const SongjogApp());
 
-class HisabKitabApp extends StatelessWidget {
-  const HisabKitabApp({super.key});
+class SongjogApp extends StatelessWidget {
+  const SongjogApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'HisabKitab',
+      title: 'Songjog',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
@@ -36,7 +36,7 @@ class WelcomePage extends StatelessWidget {
               const Icon(Icons.account_balance_wallet_rounded, size: 72),
               const SizedBox(height: 24),
               Text(
-                'HisabKitab',
+                'Songjog',
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.displaySmall?.copyWith(
                       fontWeight: FontWeight.w800,
