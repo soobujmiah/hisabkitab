@@ -19,13 +19,13 @@ The application must be offline-first for normal owner operations. UI and domain
 
 ## Current implementation boundary
 
-`LocalStore` is the application storage abstraction. `SqliteStore` (`songjog.db`, schema v2, foreign_keys ON, indexes on `transaction_lines.transaction_id`, `transactions.created_at`, `transactions.customer_id`) is the durable production implementation, verified by `sqlite_store_test.dart` via sqflite_common_ffi and re-verified at `3ebac8b` via CI `32990932079` (74/74). `InMemoryStore` is retained as in-memory fallback when SQLite open fails (with diagnostic `database_open` error record) and as test fake without real I/O.
+`LocalStore` is the application storage abstraction. `SqliteStore` (`songjog.db`, schema v2, foreign_keys ON, indexes on `transaction_lines.transaction_id`, `transactions.created_at`, `transactions.customer_id`) is the durable production implementation, verified by `sqlite_store_test.dart` via sqflite_common_ffi and re-verified at `9e25997` via CI `33006998608` (92/92). `InMemoryStore` is retained as in-memory fallback when SQLite open fails (with diagnostic `database_open` error record) and as test fake without real I/O. Completed sales have no delete method — immutable per policy.
 
-Transaction persistence for business profile + multi-line transactions + payment/due has been verified at the domain level (`sale_service_test.dart` persistence incl overpayment clamp + failure recording) and via widget flows (`sale_entry_screen_test.dart` save → loadTransactions). Full guarantees (workspace isolation, migration from each version, interrupted write recovery, export/import round trip, large history performance) remain to be explicitly tested per testing gates.
+Transaction persistence for business profile + multi-line transactions + payment/due + returnable (clamped paid, returnable = entered - total) has been verified at the domain level (`sale_service_test.dart` persistence incl overpayment clamp + returnable + failure recording) and via widget flows (`sale_entry_screen_test.dart` save → loadTransactions, returnable UI). Completed sales are immutable — no delete API in `LocalStore`/`BusinessRepository`, `saveTransaction` uses replace only for same ID (correction via new ID, not hard-delete), consistent with data-model policy (void/reversal future). Full guarantees (workspace isolation, migration, interrupted write recovery, export/import round trip, large history) remain to be explicitly tested.
 
-## Testing gates — current status at `3ebac8b`, CI `32990932079`
+## Testing gates — current status at `9e25997`, CI `33006998608` (92/92)
 
-- Save and reload after process restart — VERIFIED historically via device artifacts (persistent JSONL log survived force-stop → restart, all session-1 events survived) + unit tests via store reopen
+- Save and reload after process restart — VERIFIED historically via device artifacts (persistent JSONL log survived force-stop → restart, all session-1 events survived, transactions survived) + unit tests via store reopen + device Record 3 (2 app_start + 4 sales survived restart)
 - Multiple workspace isolation — FUTURE (single profile currently)
 - Transaction ordering — VERIFIED via `loadTransactions` ordered `created_at DESC`
 - Duplicate ID prevention — VERIFIED via `removeWhere` + replace + `saveTransaction` validation at least one line
