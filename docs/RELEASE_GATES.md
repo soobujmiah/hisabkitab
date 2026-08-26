@@ -4,25 +4,25 @@ A feature is not release-ready because its documentation exists. It must pass th
 
 ## Gate 1 — Foundation
 
-- [x] Local durable database implemented — `SqliteStore` (schema v2), verified by `sqlite_store_test.dart` via sqflite_common_ffi (2026-08-26)
+- [x] Local durable database implemented — `SqliteStore` (schema v2), verified by `sqlite_store_test.dart` via sqflite_common_ffi (2026-08-26); re-verified at `3ebac8b` via CI `32990932079` (74/74 tests)
 - [ ] Business/workspace scoping enforced
 - [ ] Migration strategy tested (v1→v2 upgrade path exists in code; no upgrade test yet)
-- [x] Offline transaction persistence tested — profile + multi-line transactions persist across store reopen (2026-08-26)
+- [x] Offline transaction persistence tested — profile + multi-line transactions persist across store reopen (2026-08-26); re-verified at `3ebac8b` via `sqlite_store_test.dart` + `sale_service_test.dart` persistence
 
 ## Gate 2 — Owner onboarding
 
 - [ ] Google/email authentication implemented
-- [ ] Owner profile/business creation implemented
-- [ ] Business type selection implemented
-- [ ] Minimal mandatory fields verified
-- [ ] Optional fields remain optional
+- [x] Owner profile/business creation implemented — `OnboardingService.createOwnerWorkspace` + `BusinessProfile` (business/institution, 12 BusinessTypes), verified by `onboarding_screen_test.dart`, CI `32990932079` (74/74)
+- [ ] Business type selection implemented (dropdown exists, adaptive dashboard not yet)
+- [x] Minimal mandatory fields verified — workspace name required, save disabled while empty/whitespace-only (`ValueListenableBuilder`), service-level guard preserved, verified by `onboarding_screen_test.dart`, CI `32980204789` and `32990932079`
+- [x] Optional fields remain optional — phone, address, subtype optional, verified by `onboarding_service.dart` + `workspace_fields.dart`
 
 ## Gate 3 — Daily operations
 
 - [ ] Product/service creation
-- [ ] Fast sale
-- [ ] Multi-line transaction
-- [ ] Payment / partial payment / due
+- [x] Fast sale — `SaleEntryScreen` + `SaleEntryService` (description/quantity/price in exact minor-unit BDT via `takaToMinor` string/integer parsing, no float), verified by `sale_service_test.dart` (takaToMinor, minorToTaka, derivePaymentStatus, clampPaid) + `sale_entry_screen_test.dart` widget flows (offstage-safe Finder + ensureVisible), CI `32990932079` (74/74 PASS), APK badging `com.songjog.songjog` — **not yet device-validated**
+- [x] Multi-line transaction — `SaleEntryService.saveSale` accepts `List<({description, quantity, priceMinor})>`, total = sum `lineTotalMinor`, verified by `sale_service_test.dart` multi-line totals + `sale_entry_screen_test.dart` multi-line widget test, CI `32990932079`
+- [x] Payment / partial payment / due — `derivePaymentStatus` (unpaid/partial/paid, zero total never paid), `clampPaid` [0,total] prevents silent overpayment, `dueMinor = total - paid`, optional `PaymentMethod`, UI shows paid/partial/unpaid + due, verified by `sale_service_test.dart` + widget tests, CI `32990932079` — **not yet device-validated**
 - [ ] Private actual cost and profit
 - [ ] Customer/service recipient
 - [ ] Purchase/expense
@@ -45,7 +45,7 @@ A feature is not release-ready because its documentation exists. It must pass th
 - [ ] Due
 - [ ] Expense
 - [ ] Cash reconciliation
-- [ ] Export
+- [x] Export — user-data export (`UserDataExport` deterministic UTC filenames, `application/json`) + diagnostic export (`DiagnosticCollector`, redaction, persistent JSONL) implemented, verified by `export_service_test.dart`, `user_data_export_test.dart`, `diagnostic_*_test.dart`, `local_export_file_adapter_test.dart`, `persistent_diagnostic_log_test.dart`, and historically device-validated on Redmi Turbo 4 Pro (artifacts `songjog_diagnostics_20260826_104327.json` + `120529.json`, no secrets, share sheet dispatched, restart persistence); re-verified CI `32990932079` (74/74)
 
 ## Gate 6 — Commercial control
 
@@ -69,12 +69,12 @@ A feature is not release-ready because its documentation exists. It must pass th
 
 ## Gate 8 — Validation
 
-- [ ] Unit tests
-- [ ] Domain tests
-- [ ] Persistence tests
-- [ ] Integration tests
-- [ ] Real-device tests
+- [x] Unit tests — `flutter test` 74/74 PASS at `3ebac8b`, CI `32990932079` (analyze clean, legacy audit success, APK built + badging `com.songjog.songjog` `0.1.0` `24/36` `Songjog`)
+- [x] Domain tests — `sale_test.dart`, `diagnostic_*_test.dart`, `export_filename_test.dart`, `takaToMinor`/`minorToTaka`/`derivePaymentStatus`/`clampPaid` tests, CI `32990932079`
+- [x] Persistence tests — `sqlite_store_test.dart` via sqflite_common_ffi + `sale_service_test.dart` persistence incl overpayment clamp + failure recording, CI `32990932079`
+- [ ] Integration tests — onboarding widget tests + sale entry widget flows + workspace home widget tests + settings tests exist (onboarding → workspace routing, fast sale entry, workspace home recent list), but full integration smoke (offline recovery, inventory, large history) not yet
+- [ ] Real-device tests — historical device validation COMPLETE for export/diagnostic milestone at `8e21317`/`8206b8d` (artifacts 104327 + 120529, Redmi Turbo 4 Pro); fast sale entry + workspace home at `3ebac8b`/`5142091` **not yet device-validated** — pending
 - [ ] Regression test
-- [ ] Release build reproducibility
+- [ ] Release build reproducibility — only debug APK built (`app-debug.apk` 163 MB at `3ebac8b`), no release signing
 
-Only verified gates may be reported as complete.
+Only verified gates may be reported as complete. Historical device artifacts must not be reused as proof for new HEAD features (see `PHYSICAL_DEVICE_VALIDATION.md`).

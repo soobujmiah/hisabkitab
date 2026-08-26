@@ -304,3 +304,26 @@ non-blocking follow-up and was **not** marked PASS.
 - Merge commit: `e3a1c160257b3661a235509bff3ee14f7cc39ffe` (parents `b532e7a` + `159c8c7`)
 - Post-merge CI on `main`: run [32971289199](https://github.com/soobujmiah/songjog/actions/runs/32971289199) — all jobs success
 - Containment verified: feature tip `159c8c7` is an ancestor of `main`; merge tree identical to the feature tip tree.
+
+## Update — Post `3ebac8b` Fast Sale Entry (CI GREEN, NOT device-validated)
+
+**Date:** 2026-08-26
+**Live HEAD at this update:** `3ebac8be0e979f11c00b5e5e2f302bdfc48c92eb` (includes `5142091` fast sale entry, workspace home and post-onboarding flow)
+**CI evidence (new HEAD, not historical):** Run [32990932079](https://github.com/soobujmiah/songjog/actions/runs/32990932079) — **GREEN** — Analyze PASS (No issues found!), Tests 74/74 PASS, APK built `app-debug.apk` 163 MB, Badging `package: com.songjog.songjog` `versionCode=1` `versionName=0.1.0` `sdkVersion:24` `targetSdkVersion:36` `application-label:Songjog`, Legacy audit PASS
+
+**What changed since the historical milestone above:**
+- Fast Sale UI implemented: `SaleEntryScreen` (description/quantity/price in exact minor-unit BDT via `takaToMinor` string/integer parsing, no float), `SaleEntryService` (multi-line, `derivePaymentStatus`, `clampPaid` [0,total], optional `PaymentMethod`, diagnostic `transaction_save` info/error)
+- Multi-line transaction implemented and CI-verified
+- Payment / partial / due implemented and CI-verified
+- Workspace Home implemented: `WorkspaceHomePage` shows recent transactions with total/due/status, smart empty state, FAB new sale, settings reachable, currency `৳` bn / `BDT` en
+- Onboarding -> workspace routing: `main.dart` FutureBuilder goes directly to `WorkspaceHomePage` when profile exists; `WelcomePage` pushReplacement to workspace home after onboarding
+- Localization expanded: 18+ new keys (`workspace_home_recent`, `no_transactions`, `new_sale`, `sale_title`, `complete_sale`, `paid_status`, etc.) + currency rendering
+- Tests: 74 total (was 48/48 at `8e21317`, 51/51 at `57958fd`, now 74/74 at `3ebac8b`)
+
+**What this update does NOT claim:**
+- No physical-device validation for fast sale entry, workspace home, payment/due, currency display, or onboarding->workspace routing at `3ebac8b`/`5142091` — pending future device validation. Historical artifacts `104327.json` + `120529.json` must NOT be reused as proof for new features.
+- No release signing, no commercial entitlement backend, no product/service catalog UI, no profit reporting, no inventory, no documents.
+
+**Relationship to historical milestone:**
+- The historical milestone "Physical Device Validation Ready" for export/diagnostic at `8e21317`/`8206b8d` remains HISTORICAL and COMPLETE with its own evidence.
+- This update is a new CI-verified increment (Phase 3 step 1) that is NOT yet device-validated. It does not replace or delete the historical record.

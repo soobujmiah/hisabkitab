@@ -19,17 +19,17 @@ The application must be offline-first for normal owner operations. UI and domain
 
 ## Current implementation boundary
 
-`LocalStore` is the application storage abstraction. `InMemoryStore` is a temporary implementation for domain/UI development and is **not** production persistence.
+`LocalStore` is the application storage abstraction. `SqliteStore` (`songjog.db`, schema v2, foreign_keys ON, indexes on `transaction_lines.transaction_id`, `transactions.created_at`, `transactions.customer_id`) is the durable production implementation, verified by `sqlite_store_test.dart` via sqflite_common_ffi and re-verified at `3ebac8b` via CI `32990932079` (74/74). `InMemoryStore` is retained as in-memory fallback when SQLite open fails (with diagnostic `database_open` error record) and as test fake without real I/O.
 
-The next implementation replaces it with a durable on-device database, migration tests, and recovery tests before commercial release.
+Transaction persistence for business profile + multi-line transactions + payment/due has been verified at the domain level (`sale_service_test.dart` persistence incl overpayment clamp + failure recording) and via widget flows (`sale_entry_screen_test.dart` save → loadTransactions). Full guarantees (workspace isolation, migration from each version, interrupted write recovery, export/import round trip, large history performance) remain to be explicitly tested per testing gates.
 
-## Testing gates
+## Testing gates — current status at `3ebac8b`, CI `32990932079`
 
-- Save and reload after process restart
-- Multiple workspace isolation
-- Transaction ordering
-- Duplicate ID prevention
-- Migration from each supported schema version
-- Interrupted write recovery
-- Export/import round trip
-- Large transaction history performance
+- Save and reload after process restart — VERIFIED historically via device artifacts (persistent JSONL log survived force-stop → restart, all session-1 events survived) + unit tests via store reopen
+- Multiple workspace isolation — FUTURE (single profile currently)
+- Transaction ordering — VERIFIED via `loadTransactions` ordered `created_at DESC`
+- Duplicate ID prevention — VERIFIED via `removeWhere` + replace + `saveTransaction` validation at least one line
+- Migration from each supported schema version — UNVERIFIED (v1→v2 path exists, no upgrade test)
+- Interrupted write recovery — UNVERIFIED
+- Export/import round trip — PARTIAL (export verified, import not)
+- Large transaction history performance — UNVERIFIED
