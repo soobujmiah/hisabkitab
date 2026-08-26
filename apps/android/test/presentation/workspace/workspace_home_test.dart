@@ -29,22 +29,21 @@ class _NoopShareService implements ShareService {
     required String path,
     required String mimeType,
     String? title,
-  }) async =>
-      true;
+  }) async => true;
 }
 
 class _FixedReportSource implements DiagnosticReportSource {
   @override
   DiagnosticReport build() => DiagnosticReport(
-        appVersion: '0.1.0',
-        buildNumber: '1',
-        platform: 'android',
-        deviceModel: 'test-device',
-        osVersion: '16',
-        locale: 'bn',
-        runtimeMode: 'test',
-        events: const [],
-      );
+    appVersion: '0.1.0',
+    buildNumber: '1',
+    platform: 'android',
+    deviceModel: 'test-device',
+    osVersion: '16',
+    locale: 'bn',
+    runtimeMode: 'test',
+    events: const [],
+  );
 }
 
 void main() {
@@ -55,7 +54,7 @@ void main() {
   late InMemoryStore store;
   late AppServices services;
 
-  Future<AppServices> buildServices() {
+  Future<AppServices> buildServices() async {
     store = InMemoryStore();
     final repository = DefaultBusinessRepository(store);
     final collector = DiagnosticCollector();
@@ -78,18 +77,22 @@ void main() {
 
   Future<void> pumpHome(WidgetTester tester) async {
     await tester.pumpWidget(
-      MaterialApp(home: WorkspaceHomePage(services: services, locale: locale)),
+      MaterialApp(
+        home: WorkspaceHomePage(services: services, locale: locale),
+      ),
     );
     await tester.pumpAndSettle();
   }
 
   Future<void> seedWorkspace() async {
-    await store.saveBusinessProfile(const BusinessProfile(
-      id: 'p1',
-      name: 'Demo Shop',
-      workspaceKind: WorkspaceKind.business,
-      businessType: BusinessType.retail,
-    ));
+    await store.saveBusinessProfile(
+      const BusinessProfile(
+        id: 'p1',
+        name: 'Demo Shop',
+        workspaceKind: WorkspaceKind.business,
+        businessType: BusinessType.retail,
+      ),
+    );
   }
 
   testWidgets('empty workspace shows the smart empty state', (tester) async {
@@ -103,37 +106,42 @@ void main() {
     expect(find.text('Demo Shop'), findsOneWidget);
   });
 
-  testWidgets('recent transactions show totals, due and status',
-      (tester) async {
+  testWidgets('recent transactions show totals, due and status', (
+    tester,
+  ) async {
     await buildServices();
     await seedWorkspace();
-    await store.saveTransaction(TransactionRecord(
-      id: 't1',
-      type: TransactionType.sale,
-      createdAt: DateTime(2026, 8, 26),
-      paymentStatus: PaymentStatus.partial,
-      paidMinor: 30000,
-      lines: const [
-        TransactionLine(
-          id: 'l1',
-          description: 'Mouse',
-          quantity: 1,
-          sellingPriceMinor: 55000,
-        ),
-        TransactionLine(
-          id: 'l2',
-          description: 'Windows setup',
-          quantity: 1,
-          sellingPriceMinor: 85000,
-        ),
-      ],
-    ));
+    await store.saveTransaction(
+      TransactionRecord(
+        id: 't1',
+        type: TransactionType.sale,
+        createdAt: DateTime(2026, 8, 26),
+        paymentStatus: PaymentStatus.partial,
+        paidMinor: 30000,
+        lines: const [
+          TransactionLine(
+            id: 'l1',
+            description: 'Mouse',
+            quantity: 1,
+            sellingPriceMinor: 55000,
+          ),
+          TransactionLine(
+            id: 'l2',
+            description: 'Windows setup',
+            quantity: 1,
+            sellingPriceMinor: 85000,
+          ),
+        ],
+      ),
+    );
     await pumpHome(tester);
 
     expect(find.text(t('workspace_home_recent')), findsOneWidget);
     expect(find.text('Mouse'), findsOneWidget);
-    expect(find.text(t('more_lines').replaceFirst('{count}', '1')),
-        findsOneWidget);
+    expect(
+      find.text(t('more_lines').replaceFirst('{count}', '1')),
+      findsOneWidget,
+    );
     // Total ৳1400, due ৳1100.
     expect(find.text('৳1400'), findsOneWidget);
     expect(find.text('${t('due')}: ৳1100'), findsOneWidget);

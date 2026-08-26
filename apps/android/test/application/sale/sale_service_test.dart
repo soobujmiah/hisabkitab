@@ -6,6 +6,22 @@ import 'package:songjog/domain/models/business_profile.dart';
 import 'package:songjog/domain/models/transaction.dart';
 import 'package:songjog/domain/services/diagnostic_collector.dart';
 
+class _ThrowingRepo implements BusinessRepository {
+  @override
+  Future<void> saveProfile(BusinessProfile profile) async =>
+      throw StateError('disk failure');
+
+  @override
+  Future<BusinessProfile?> getProfile() async => null;
+
+  @override
+  Future<void> saveTransaction(TransactionRecord transaction) async =>
+      throw StateError('disk failure');
+
+  @override
+  Future<List<TransactionRecord>> getTransactions() async => const [];
+}
+
 void main() {
   group('takaToMinor', () {
     test('parses whole taka', () {
@@ -38,8 +54,11 @@ void main() {
         '1.2.3',
         '১২৩',
       ]) {
-        expect(() => takaToMinor(bad), throwsFormatException,
-            reason: 'should reject: "$bad"');
+        expect(
+          () => takaToMinor(bad),
+          throwsFormatException,
+          reason: 'should reject: "$bad"',
+        );
       }
     });
   });
@@ -100,9 +119,7 @@ void main() {
 
     test('persists a paid single-line sale', () async {
       final record = await service.saveSale(
-        lines: [
-          (description: 'Mouse', quantity: 1, priceMinor: 85000),
-        ],
+        lines: [(description: 'Mouse', quantity: 1, priceMinor: 85000)],
         paidMinor: 85000,
         paymentMethod: PaymentMethod.cash,
       );
@@ -116,8 +133,9 @@ void main() {
       expect(stored.single.lines.single.description, 'Mouse');
       expect(stored.single.totalMinor, 85000);
 
-      final events = collector.events
-          .where((e) => e.operation == 'transaction_save' && e.level == 'info');
+      final events = collector.events.where(
+        (e) => e.operation == 'transaction_save' && e.level == 'info',
+      );
       expect(events, hasLength(1));
     });
 
@@ -138,9 +156,7 @@ void main() {
 
     test('overpayment is clamped, never stored beyond the total', () async {
       final record = await service.saveSale(
-        lines: [
-          (description: 'Mouse', quantity: 1, priceMinor: 85000),
-        ],
+        lines: [(description: 'Mouse', quantity: 1, priceMinor: 85000)],
         paidMinor: 90000,
       );
       expect(record.paidMinor, 85000);
@@ -149,50 +165,27 @@ void main() {
 
     test('zero payment is unpaid', () async {
       final record = await service.saveSale(
-        lines: [
-          (description: 'Mouse', quantity: 1, priceMinor: 85000),
-        ],
+        lines: [(description: 'Mouse', quantity: 1, priceMinor: 85000)],
       );
       expect(record.paidMinor, 0);
       expect(record.paymentStatus, PaymentStatus.unpaid);
     });
 
     test('empty lines are rejected', () async {
-      expect(
-        () => service.saveSale(lines: const []),
-        throwsArgumentError,
-      );
+      expect(() => service.saveSale(lines: const []), throwsArgumentError);
     });
 
     test('a failing store records the error and rethrows', () async {
-      class ThrowingRepo implements BusinessRepository {
-        @override
-        Future<void> saveProfile(BusinessProfile profile) async =>
-            throw StateError('disk failure');
-
-        @override
-        Future<BusinessProfile?> getProfile() async => null;
-
-        @override
-        Future<void> saveTransaction(TransactionRecord transaction) async =>
-            throw StateError('disk failure');
-
-        @override
-        Future<List<TransactionRecord>> getTransactions() async => const [];
-      }
-
-      final failing =
-          SaleEntryService(ThrowingRepo(), collector);
+      final failing = SaleEntryService(_ThrowingRepo(), collector);
       expect(
         () => failing.saveSale(
-          lines: [
-            (description: 'Mouse', quantity: 1, priceMinor: 85000),
-          ],
+          lines: [(description: 'Mouse', quantity: 1, priceMinor: 85000)],
         ),
         throwsStateError,
       );
-      final errors = collector.events
-          .where((e) => e.operation == 'transaction_save' && e.level == 'error');
+      final errors = collector.events.where(
+        (e) => e.operation == 'transaction_save' && e.level == 'error',
+      );
       expect(errors, hasLength(1));
     });
   });
