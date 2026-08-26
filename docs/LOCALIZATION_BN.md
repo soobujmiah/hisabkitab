@@ -1,4 +1,4 @@
-# HisabKitab Bengali Localization Contract
+# Songjog Bengali Localization Contract
 
 ## Requirement
 

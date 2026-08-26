@@ -1,10 +1,10 @@
 # Connected Participant Model
 
-HisabKitab is not only an internal ledger for the business/institution. Relevant counterparties can optionally use the same platform through their own account and can be connected to a business or institution.
+Songjog is not only an internal ledger for the business/institution. Relevant counterparties can optionally use the same platform through their own account and can be connected to a business or institution.
 
 ## Core principle
 
-A person may have one HisabKitab identity and participate in different roles without creating duplicate records unnecessarily.
+A person may have one Songjog identity and participate in different roles without creating duplicate records unnecessarily.
 
 Examples:
 
@@ -36,7 +36,7 @@ Institutional users must not automatically receive access to unrelated accountin
 
 ## Business/service side
 
-A customer or service recipient can optionally have a HisabKitab account and be linked to the business transaction/customer record.
+A customer or service recipient can optionally have a Songjog account and be linked to the business transaction/customer record.
 
 Possible capabilities:
 
@@ -63,7 +63,7 @@ A customer account is never mandatory merely to complete a sale unless the busin
 ## Product architecture
 
 ```text
-                         HisabKitab Identity
+                         Songjog Identity
                                   |
              +--------------------+--------------------+
              |                    |                    |

@@ -1,8 +1,8 @@
-# HisabKitab Trial & Licensing
+# Songjog Trial & Licensing
 
 ## Commercial model
 
-HisabKitab may be distributed as a time-limited trial so the owner can experience the complete Owner Edition before purchasing.
+Songjog may be distributed as a time-limited trial so the owner can experience the complete Owner Edition before purchasing.
 
 Recommended initial configuration:
 - Trial duration is configurable by the product operator (for example 7 days or 30 days).

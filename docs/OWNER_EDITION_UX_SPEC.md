@@ -1,4 +1,4 @@
-# HisabKitab Owner Edition — World-Class UX & Admin Surface Specification
+# Songjog Owner Edition — World-Class UX & Admin Surface Specification
 
 **Status:** Release-critical product specification
 **Target:** Android-first Owner Edition

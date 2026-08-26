@@ -5,7 +5,7 @@
 
 ## Product principle
 
-HisabKitab is mobile-first, not mobile-only. A business owner must be able to begin on Android and later continue from a computer without creating a second business ledger.
+Songjog is mobile-first, not mobile-only. A business owner must be able to begin on Android and later continue from a computer without creating a second business ledger.
 
 ## Identity
 

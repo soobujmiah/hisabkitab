@@ -8,7 +8,7 @@ The repository may be public while the released application remains commercially
 
 1. User installs the application.
 2. First launch shows the activation/account entry flow.
-3. User signs in once with the HisabKitab account.
+3. User signs in once with the Songjog account.
 4. The account is associated with a Business identity.
 5. A valid trial or paid entitlement is checked by the licensing service.
 6. After successful authentication and entitlement verification, the app creates a secure local session.

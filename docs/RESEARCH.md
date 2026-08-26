@@ -4,7 +4,7 @@
 
 TallyKhata positions digital bookkeeping around customer/supplier dues, purchases, expenses, stock, backup, messaging, reports, and Bangla UX. Its current public product information also describes offline account entry, multi-business capability in its premium tier, stock accounting, downloadable reports, and Bangla QR/payment functionality. This validates the importance of simple bookkeeping, dues, stock, reporting, backup, and local-language workflows. Sources: TallyKhata public site and Google Play listing.
 
-bKash Merchant publicly emphasizes merchant onboarding, transaction history, merchant QR, 24/7 collection, notifications, transaction summaries, and payment-related services. This indicates that payment visibility and immediate feedback are core merchant expectations, but HisabKitab should not assume it can itself provide regulated payment services without the necessary partnerships/licensing.
+bKash Merchant publicly emphasizes merchant onboarding, transaction history, merchant QR, 24/7 collection, notifications, transaction summaries, and payment-related services. This indicates that payment visibility and immediate feedback are core merchant expectations, but Songjog should not assume it can itself provide regulated payment services without the necessary partnerships/licensing.
 
 Recent Bangladesh-oriented accounting products also emphasize POS, inventory, customer/supplier due, sales/purchases, barcode, reports, multi-user access, Bangla-friendly workflows, reminders, and cloud access. The market is therefore competitive; differentiation should come from simplicity, superior mobile UX, business-type personalization, reliable offline-first operation, and actionable insights rather than copying feature checklists.
 
@@ -38,7 +38,7 @@ Current mobile accounting comparisons emphasize invoices, expenses, receipts, re
 
 ## Product constraints
 
-HisabKitab should not compete initially by becoming a regulated wallet or lending product. Payment integrations should be treated as optional partner integrations with proper legal/technical review. The app can record payment methods and transaction references independently of providing a payment rail.
+Songjog should not compete initially by becoming a regulated wallet or lending product. Payment integrations should be treated as optional partner integrations with proper legal/technical review. The app can record payment methods and transaction references independently of providing a payment rail.
 
 ## Research sources
 
@@ -50,4 +50,4 @@ HisabKitab should not compete initially by becoming a regulated wallet or lendin
 - Tukri feature overview: https://tukri.bd/features
 - Fit Small Business mobile accounting comparison, 2026: https://fitsmallbusiness.com/mobile-accounting-apps/
 
-These sources are research inputs, not product requirements. HisabKitab's repository specification remains authoritative for implementation.
+These sources are research inputs, not product requirements. Songjog's repository specification remains authoritative for implementation.
