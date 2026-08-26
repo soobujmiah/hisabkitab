@@ -10,12 +10,14 @@ class SqliteStore implements LocalStore {
 
   final Database _db;
 
-  static Future<SqliteStore> open() async {
-    final databasesPath = await getDatabasesPath();
-    final path = p.join(databasesPath, 'songjog.db');
+  static Future<SqliteStore> open({String? databasePath}) async {
+    final path = databasePath ?? p.join(await getDatabasesPath(), 'songjog.db');
     final db = await openDatabase(
       path,
       version: 1,
+      onConfigure: (database) async {
+        await database.execute('PRAGMA foreign_keys = ON');
+      },
       onCreate: (database, version) async {
         await database.execute('''
           CREATE TABLE business_profile (
@@ -48,9 +50,17 @@ class SqliteStore implements LocalStore {
             description TEXT NOT NULL,
             quantity REAL NOT NULL,
             selling_price_minor INTEGER NOT NULL,
-            actual_cost_minor INTEGER
+            actual_cost_minor INTEGER,
+            FOREIGN KEY(transaction_id) REFERENCES transactions(id) ON DELETE CASCADE
           )
         ''');
+        await database.execute(
+          'CREATE INDEX idx_transaction_lines_transaction_id '
+          'ON transaction_lines(transaction_id)',
+        );
+        await database.execute(
+          'CREATE INDEX idx_transactions_created_at ON transactions(created_at)',
+        );
       },
     );
     return SqliteStore._(db);
@@ -91,6 +101,9 @@ class SqliteStore implements LocalStore {
 
   @override
   Future<void> saveTransaction(TransactionRecord transaction) async {
+    if (transaction.lines.isEmpty) {
+      throw ArgumentError('A transaction must contain at least one line.');
+    }
     await _db.transaction((txn) async {
       await txn.insert(
         'transactions',
