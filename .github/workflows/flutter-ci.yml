@@ -112,6 +112,7 @@ jobs:
             | grep -v '^\./docs/NAME_MIGRATION.md' \
             | grep -v '^\./docs/PRODUCT_SPEC.md' \
             | grep -v '^\./docs/ROADMAP.md' \
+            | grep -v '^\./docs/PHYSICAL_DEVICE_VALIDATION.md' \
             | grep -v '^\./apps/android/README.md' \
             || true)"
           if [ -n "$HITS" ]; then
