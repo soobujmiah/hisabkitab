@@ -1,4 +1,4 @@
-# HisabKitab Domain Data Model
+# Songjog Domain Data Model
 
 The model is business-scoped. A user may eventually belong to multiple businesses, while each business owns its operational records.
 
@@ -108,7 +108,7 @@ For a normal product/service sale:
 
 `grossProfit = recognizedSellingValue - recognizedCostBasis`
 
-For commission-based services, the business may record a transaction amount separately from the business's recognized commission/profit according to the configured service model. External provider balances are not assumed to be HisabKitab records.
+For commission-based services, the business may record a transaction amount separately from the business's recognized commission/profit according to the configured service model. External provider balances are not assumed to be Songjog records.
 
 ## Ledger invariant
 

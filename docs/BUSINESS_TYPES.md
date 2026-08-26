@@ -1,6 +1,6 @@
 # Business Types & Configurable Workflows
 
-HisabKitab uses one product with configurable workflows. Business type changes defaults and recommendations; it does not create separate products.
+Songjog uses one product with configurable workflows. Business type changes defaults and recommendations; it does not create separate products.
 
 | Type | Primary workflow | Important fields/modules |
 |---|---|---|
@@ -26,7 +26,7 @@ HisabKitab uses one product with configurable workflows. Business type changes d
 
 This is a first-class business category, not a narrow MFS product.
 
-The business owner can record operational details for services that are actually performed while leaving the provider's authoritative transaction ledger outside HisabKitab. For example:
+The business owner can record operational details for services that are actually performed while leaving the provider's authoritative transaction ledger outside Songjog. For example:
 
 - bKash/Nagad service: customer name, mobile number, transaction amount, optional reference, date/time, private commission/cost basis
 - Flexiload/recharge: customer/mobile number, recharge amount, service type, private commission/profit

@@ -1,0 +1,360 @@
+{
+  "kind": "diagnostic",
+  "filename": "songjog_diagnostics_20260826_120529.json",
+  "report": {
+    "schema_version": 1,
+    "app_version": "0.1.0",
+    "build_number": "1",
+    "platform": "android",
+    "device_model": "Redmi 25053RT47C (onyx)",
+    "os_version": "16 (SDK 36)",
+    "locale": "bn",
+    "runtime_mode": "debug",
+    "events": [
+      {
+        "timestamp": "2026-08-26T10:38:38.472704Z",
+        "level": "info",
+        "message": "SQLite database opened",
+        "category": "database",
+        "operation": "database_open"
+      },
+      {
+        "timestamp": "2026-08-26T10:38:38.474140Z",
+        "level": "info",
+        "message": "application started",
+        "category": "lifecycle",
+        "operation": "app_start"
+      },
+      {
+        "timestamp": "2026-08-26T10:38:38.487191Z",
+        "level": "info",
+        "message": "package info captured",
+        "category": "lifecycle",
+        "operation": "package_info",
+        "details": {
+          "version": "0.1.0",
+          "build_number": "1"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T10:42:28.815080Z",
+        "level": "info",
+        "message": "owner workspace created",
+        "category": "onboarding",
+        "operation": "onboarding_save",
+        "details": {
+          "workspace_kind": "institution",
+          "business_type": "retail"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T10:42:42.047322Z",
+        "level": "warning",
+        "message": "controlled test diagnostic event (requested from settings)",
+        "category": "other",
+        "operation": "test_event"
+      },
+      {
+        "timestamp": "2026-08-26T10:42:44.292124Z",
+        "level": "warning",
+        "message": "controlled test diagnostic event (requested from settings)",
+        "category": "other",
+        "operation": "test_event"
+      },
+      {
+        "timestamp": "2026-08-26T10:43:25.075343Z",
+        "level": "info",
+        "message": "export saved",
+        "category": "export",
+        "operation": "export_userData",
+        "details": {
+          "file": "songjog_data_20260826_104324.json",
+          "mime_type": "application/json"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T10:43:26.609107Z",
+        "level": "info",
+        "message": "export saved",
+        "category": "export",
+        "operation": "export_diagnostic",
+        "details": {
+          "file": "songjog_diagnostics_20260826_104326.json",
+          "mime_type": "application/json"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T10:43:27.889882Z",
+        "level": "info",
+        "message": "export saved",
+        "category": "export",
+        "operation": "export_diagnostic",
+        "details": {
+          "file": "songjog_diagnostics_20260826_104327.json",
+          "mime_type": "application/json"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T10:43:28.471914Z",
+        "level": "info",
+        "message": "export saved",
+        "category": "export",
+        "operation": "export_diagnostic",
+        "details": {
+          "file": "songjog_diagnostics_20260826_104328.json",
+          "mime_type": "application/json"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T10:43:28.913438Z",
+        "level": "info",
+        "message": "export saved",
+        "category": "export",
+        "operation": "export_diagnostic",
+        "details": {
+          "file": "songjog_diagnostics_20260826_104328.json",
+          "mime_type": "application/json"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T10:43:29.171255Z",
+        "level": "info",
+        "message": "export saved",
+        "category": "export",
+        "operation": "export_diagnostic",
+        "details": {
+          "file": "songjog_diagnostics_20260826_104329.json",
+          "mime_type": "application/json"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T10:43:29.387927Z",
+        "level": "info",
+        "message": "export saved",
+        "category": "export",
+        "operation": "export_diagnostic",
+        "details": {
+          "file": "songjog_diagnostics_20260826_104329.json",
+          "mime_type": "application/json"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T10:43:30.119104Z",
+        "level": "warning",
+        "message": "controlled test diagnostic event (requested from settings)",
+        "category": "other",
+        "operation": "test_event"
+      },
+      {
+        "timestamp": "2026-08-26T10:43:30.887742Z",
+        "level": "info",
+        "message": "export saved",
+        "category": "export",
+        "operation": "export_diagnostic",
+        "details": {
+          "file": "songjog_diagnostics_20260826_104330.json",
+          "mime_type": "application/json"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T10:43:31.228283Z",
+        "level": "info",
+        "message": "export saved",
+        "category": "export",
+        "operation": "export_diagnostic",
+        "details": {
+          "file": "songjog_diagnostics_20260826_104331.json",
+          "mime_type": "application/json"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T10:44:13.933181Z",
+        "level": "info",
+        "message": "export saved",
+        "category": "export",
+        "operation": "export_diagnostic",
+        "details": {
+          "file": "songjog_diagnostics_20260826_104413.json",
+          "mime_type": "application/json"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T10:44:22.751168Z",
+        "level": "warning",
+        "message": "share not completed",
+        "category": "export",
+        "operation": "share_export",
+        "details": {
+          "file": "songjog_data_20260826_104324.json"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T10:44:54.458277Z",
+        "level": "info",
+        "message": "export saved",
+        "category": "export",
+        "operation": "export_diagnostic",
+        "details": {
+          "file": "songjog_diagnostics_20260826_104454.json",
+          "mime_type": "application/json"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T10:45:24.130509Z",
+        "level": "info",
+        "message": "share dispatched",
+        "category": "export",
+        "operation": "share_export",
+        "details": {
+          "file": "songjog_diagnostics_20260826_104326.json"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T10:45:54.287620Z",
+        "level": "info",
+        "message": "export saved",
+        "category": "export",
+        "operation": "export_diagnostic",
+        "details": {
+          "file": "songjog_diagnostics_20260826_104554.json",
+          "mime_type": "application/json"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T10:45:55.318867Z",
+        "level": "info",
+        "message": "export saved",
+        "category": "export",
+        "operation": "export_userData",
+        "details": {
+          "file": "songjog_data_20260826_104555.json",
+          "mime_type": "application/json"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T10:45:56.627021Z",
+        "level": "info",
+        "message": "export saved",
+        "category": "export",
+        "operation": "export_userData",
+        "details": {
+          "file": "songjog_data_20260826_104556.json",
+          "mime_type": "application/json"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T10:45:57.493524Z",
+        "level": "info",
+        "message": "export saved",
+        "category": "export",
+        "operation": "export_userData",
+        "details": {
+          "file": "songjog_data_20260826_104557.json",
+          "mime_type": "application/json"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T10:45:58.457847Z",
+        "level": "info",
+        "message": "export saved",
+        "category": "export",
+        "operation": "export_diagnostic",
+        "details": {
+          "file": "songjog_diagnostics_20260826_104558.json",
+          "mime_type": "application/json"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T10:45:59.244365Z",
+        "level": "warning",
+        "message": "controlled test diagnostic event (requested from settings)",
+        "category": "other",
+        "operation": "test_event"
+      },
+      {
+        "timestamp": "2026-08-26T10:46:11.467412Z",
+        "level": "error",
+        "message": "onboarding save rejected",
+        "category": "onboarding",
+        "operation": "onboarding_save",
+        "error": "Invalid argument(s): Workspace name is required.",
+        "stack_trace": "#0      OnboardingService.createOwnerWorkspace (package:songjog/application/onboarding/onboarding_service.dart:29:7)\n#1      _OnboardingScreenState._save (package:songjog/presentation/onboarding/onboarding_screen.dart:48:44)\n#2      _InkResponseState.handleTap (package:flutter/src/material/ink_well.dart:1224:21)\n#3      GestureRecognizer.invokeCallback (package:flutter/src/gestures/recognizer.dart:362:24)\n#4      TapGestureRecognizer.handleTapUp (package:flutter/src/gestures/tap.dart:758:11)\n#5      BaseTapGestureRecognizer._checkUp (package:flutter/src/gestures/tap.dart:383:5)\n#6      BaseTapGestureRecognizer.acceptGesture (package:flutter/src/gestures/tap.dart:353:7)\n#7      GestureArenaManager.sweep (package:flutter/src/gestures/arena.dart:173:27)\n#8      GestureBinding.handleEvent (package:flutter/src/gestures/binding.dart:542:20)\n#9      GestureBinding.dispatchEvent (package:flutter/src/gestures/binding.dart:508:22)\n#10     RendererBinding.dispatchEvent (package:flutter/src/rendering/binding.dart:473:11)\n#11     GestureBinding._handlePointerEventImmediately (package:flutter/src/gestures/binding.dart:447:7)\n#12     GestureBinding.handlePointerEvent (package:flutter/src/gestures/binding.dart:404:5)\n#13     GestureBinding._flushPointerEventQueue (package:flutter/src/gestures/binding.dart:351:7)\n#14     GestureBinding._handlePointerDataPacket (package:flutter/src/gestures/binding.dart:310:9)\n#15     _invoke1 (dart:ui/hooks.dart:457:13)\n#16     PlatformDispatcher._dispatchPointerDataPacket (dart:ui/platform_dispatcher.dart:473:7)\n#17     _dispatchPointerDataPacket (dart:ui/hooks.dart:374:31)\n"
+      },
+      {
+        "timestamp": "2026-08-26T10:46:19.630138Z",
+        "level": "info",
+        "message": "owner workspace created",
+        "category": "onboarding",
+        "operation": "onboarding_save",
+        "details": {
+          "workspace_kind": "business",
+          "business_type": "retail"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T10:46:24.386838Z",
+        "level": "info",
+        "message": "export saved",
+        "category": "export",
+        "operation": "export_diagnostic",
+        "details": {
+          "file": "songjog_diagnostics_20260826_104624.json",
+          "mime_type": "application/json"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T10:46:58.505168Z",
+        "level": "info",
+        "message": "share dispatched",
+        "category": "export",
+        "operation": "share_export",
+        "details": {
+          "file": "songjog_diagnostics_20260826_104327.json"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T11:36:01.766177Z",
+        "level": "error",
+        "message": "onboarding save rejected",
+        "category": "onboarding",
+        "operation": "onboarding_save",
+        "error": "Invalid argument(s): Workspace name is required.",
+        "stack_trace": "#0      OnboardingService.createOwnerWorkspace (package:songjog/application/onboarding/onboarding_service.dart:29:7)\n#1      _OnboardingScreenState._save (package:songjog/presentation/onboarding/onboarding_screen.dart:48:44)\n#2      _InkResponseState.handleTap (package:flutter/src/material/ink_well.dart:1224:21)\n#3      GestureRecognizer.invokeCallback (package:flutter/src/gestures/recognizer.dart:362:24)\n#4      TapGestureRecognizer.handleTapUp (package:flutter/src/gestures/tap.dart:758:11)\n#5      BaseTapGestureRecognizer._checkUp (package:flutter/src/gestures/tap.dart:383:5)\n#6      BaseTapGestureRecognizer.acceptGesture (package:flutter/src/gestures/tap.dart:353:7)\n#7      GestureArenaManager.sweep (package:flutter/src/gestures/arena.dart:173:27)\n#8      GestureBinding.handleEvent (package:flutter/src/gestures/binding.dart:542:20)\n#9      GestureBinding.dispatchEvent (package:flutter/src/gestures/binding.dart:508:22)\n#10     RendererBinding.dispatchEvent (package:flutter/src/rendering/binding.dart:473:11)\n#11     GestureBinding._handlePointerEventImmediately (package:flutter/src/gestures/binding.dart:447:7)\n#12     GestureBinding.handlePointerEvent (package:flutter/src/gestures/binding.dart:404:5)\n#13     GestureBinding._flushPointerEventQueue (package:flutter/src/gestures/binding.dart:351:7)\n#14     GestureBinding._handlePointerDataPacket (package:flutter/src/gestures/binding.dart:310:9)\n#15     _invoke1 (dart:ui/hooks.dart:457:13)\n#16     PlatformDispatcher._dispatchPointerDataPacket (dart:ui/platform_dispatcher.dart:473:7)\n#17     _dispatchPointerDataPacket (dart:ui/hooks.dart:374:31)\n"
+      },
+      {
+        "timestamp": "2026-08-26T11:36:02.618658Z",
+        "level": "error",
+        "message": "onboarding save rejected",
+        "category": "onboarding",
+        "operation": "onboarding_save",
+        "error": "Invalid argument(s): Workspace name is required.",
+        "stack_trace": "#0      OnboardingService.createOwnerWorkspace (package:songjog/application/onboarding/onboarding_service.dart:29:7)\n#1      _OnboardingScreenState._save (package:songjog/presentation/onboarding/onboarding_screen.dart:48:44)\n#2      _InkResponseState.handleTap (package:flutter/src/material/ink_well.dart:1224:21)\n#3      GestureRecognizer.invokeCallback (package:flutter/src/gestures/recognizer.dart:362:24)\n#4      TapGestureRecognizer.handleTapUp (package:flutter/src/gestures/tap.dart:758:11)\n#5      BaseTapGestureRecognizer._checkUp (package:flutter/src/gestures/tap.dart:383:5)\n#6      BaseTapGestureRecognizer.acceptGesture (package:flutter/src/gestures/tap.dart:353:7)\n#7      GestureArenaManager.sweep (package:flutter/src/gestures/arena.dart:173:27)\n#8      GestureBinding.handleEvent (package:flutter/src/gestures/binding.dart:542:20)\n#9      GestureBinding.dispatchEvent (package:flutter/src/gestures/binding.dart:508:22)\n#10     RendererBinding.dispatchEvent (package:flutter/src/rendering/binding.dart:473:11)\n#11     GestureBinding._handlePointerEventImmediately (package:flutter/src/gestures/binding.dart:447:7)\n#12     GestureBinding.handlePointerEvent (package:flutter/src/gestures/binding.dart:404:5)\n#13     GestureBinding._flushPointerEventQueue (package:flutter/src/gestures/binding.dart:351:7)\n#14     GestureBinding._handlePointerDataPacket (package:flutter/src/gestures/binding.dart:310:9)\n#15     _invoke1 (dart:ui/hooks.dart:457:13)\n#16     PlatformDispatcher._dispatchPointerDataPacket (dart:ui/platform_dispatcher.dart:473:7)\n#17     _dispatchPointerDataPacket (dart:ui/hooks.dart:374:31)\n"
+      },
+      {
+        "timestamp": "2026-08-26T11:55:02.603199Z",
+        "level": "info",
+        "message": "SQLite database opened",
+        "category": "database",
+        "operation": "database_open"
+      },
+      {
+        "timestamp": "2026-08-26T11:55:02.605325Z",
+        "level": "info",
+        "message": "application started",
+        "category": "lifecycle",
+        "operation": "app_start"
+      },
+      {
+        "timestamp": "2026-08-26T11:55:02.634523Z",
+        "level": "info",
+        "message": "package info captured",
+        "category": "lifecycle",
+        "operation": "package_info",
+        "details": {
+          "version": "0.1.0",
+          "build_number": "1"
+        }
+      }
+    ]
+  }
+}

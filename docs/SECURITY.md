@@ -1,4 +1,4 @@
-# HisabKitab Security & Privacy Baseline
+# Songjog Security & Privacy Baseline
 
 ## Principles
 

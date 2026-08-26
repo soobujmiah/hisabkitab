@@ -1,0 +1,123 @@
+name: Flutter CI
+
+on:
+  push:
+    branches:
+      - main
+      - 'feature/*'
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  FLUTTER_VERSION: '3.47.1'
+  FLUTTER_CHANNEL: stable
+
+jobs:
+  analyze-and-test:
+    name: Analyze + unit/widget tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/android
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Run tests
+        run: flutter test
+
+  apk:
+    name: Build debug APK
+    needs: analyze-and-test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/android
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: ${{ env.FLUTTER_CHANNEL }}
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build debug APK
+        run: flutter build apk --debug
+
+      - name: Verify artifact and record version
+        run: |
+          APK=build/app/outputs/flutter-apk/app-debug.apk
+          test -f "$APK"
+          ls -la "$APK"
+          echo "commit_sha=$(git rev-parse HEAD)"
+          grep '^version:' pubspec.yaml
+          AAPT_BIN="$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)/aapt"
+          "$AAPT_BIN" dump badging "$APK" | grep -E "^package:|^application-label:|^sdkVersion:|^targetSdkVersion:"
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: songjog-debug-apk
+          path: apps/android/build/app/outputs/flutter-apk/app-debug.apk
+          if-no-files-found: error
+
+  legacy-name-audit:
+    name: Legacy product-name audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Audit for legacy product-name leakage
+        run: |
+          # Current product identity is Songjog/সংযোগ. Legacy references are
+          # allowed only in explicit historical/migration documents.
+          # .github is excluded: the audit tool itself names the legacy term.
+          HITS="$(grep -rin --exclude-dir=.git --exclude-dir=.dart_tool --exclude-dir=build --exclude-dir=.github -e 'hisabkitab' . \
+            | grep -v '^\./docs/NAME_MIGRATION.md' \
+            | grep -v '^\./docs/PRODUCT_SPEC.md' \
+            | grep -v '^\./docs/ROADMAP.md' \
+            | grep -v '^\./docs/PHYSICAL_DEVICE_VALIDATION.md' \
+            | grep -v '^\./apps/android/README.md' \
+            || true)"
+          if [ -n "$HITS" ]; then
+            echo "::error::Legacy product-name references outside historical documents:"
+            echo "$HITS"
+            exit 1
+          fi
+          echo "No legacy product-name leakage outside historical documents."

@@ -1,56 +1,76 @@
-enum TransactionKind { sale, serviceSale, paymentReceived, expense, purchase, refund, returnAdjustment, transfer, withdrawal }
+enum TransactionType {
+  sale,
+  serviceSale,
+  purchase,
+  expense,
+  paymentReceived,
+  paymentMade,
+  refund,
+  returnTransaction,
+  transfer,
+  withdrawal,
+  deposit,
+  adjustment,
+}
 
-enum PaymentMethod { cash, bank, bkash, nagad, other, mixed, due }
+enum PaymentStatus { unpaid, partial, paid, refunded }
+
+enum PaymentMethod { cash, bank, mobileFinancialService, card, other }
 
 class TransactionLine {
   const TransactionLine({
     required this.id,
-    required this.name,
+    required this.description,
     required this.quantity,
-    required this.sellingPrice,
-    this.actualCost,
+    required this.sellingPriceMinor,
+    this.actualCostMinor,
   });
 
   final String id;
-  final String name;
+  final String description;
   final double quantity;
-  final double sellingPrice;
-  final double? actualCost;
+  final int sellingPriceMinor;
+  final int? actualCostMinor;
 
-  double get revenue => quantity * sellingPrice;
-  double? get grossProfit => actualCost == null
+  int get lineTotalMinor => (sellingPriceMinor * quantity).round();
+  int? get lineCostMinor => actualCostMinor == null
       ? null
-      : revenue - (quantity * actualCost!);
+      : (actualCostMinor! * quantity).round();
+
+  int? get grossProfitMinor => lineCostMinor == null
+      ? null
+      : lineTotalMinor - lineCostMinor!;
 }
 
-class BusinessTransaction {
-  const BusinessTransaction({
+class TransactionRecord {
+  const TransactionRecord({
     required this.id,
-    required this.number,
-    required this.kind,
+    required this.type,
     required this.createdAt,
     required this.lines,
-    this.paymentMethod,
-    this.amountPaid = 0,
     this.customerId,
     this.reference,
+    this.note,
+    this.paymentStatus = PaymentStatus.unpaid,
+    this.paymentMethod,
+    this.paidMinor = 0,
   });
 
   final String id;
-  final String number;
-  final TransactionKind kind;
+  final TransactionType type;
   final DateTime createdAt;
   final List<TransactionLine> lines;
-  final PaymentMethod? paymentMethod;
-  final double amountPaid;
   final String? customerId;
   final String? reference;
+  final String? note;
+  final PaymentStatus paymentStatus;
+  final PaymentMethod? paymentMethod;
+  final int paidMinor;
 
-  double get total => lines.fold(0, (sum, line) => sum + line.revenue);
-  double get due => (total - amountPaid).clamp(0, double.infinity);
-  double? get grossProfit {
-    final profits = lines.map((line) => line.grossProfit);
-    if (profits.any((profit) => profit == null)) return null;
-    return profits.fold<double>(0, (sum, profit) => sum + profit!);
-  }
+  int get totalMinor => lines.fold(0, (sum, line) => sum + line.lineTotalMinor);
+  int get dueMinor => totalMinor - paidMinor;
+  int get grossProfitMinor => lines.fold(
+        0,
+        (sum, line) => sum + (line.grossProfitMinor ?? 0),
+      );
 }

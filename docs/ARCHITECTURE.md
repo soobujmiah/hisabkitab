@@ -1,4 +1,4 @@
-# HisabKitab Architecture
+# Songjog Architecture
 
 ## Goals
 
@@ -70,6 +70,8 @@ Infrastructure
 - notifications
 - subscription
 - sync
+- education
+- healthcare
 
 Each module should have explicit public interfaces and avoid reaching directly into another module's storage implementation.
 
@@ -173,6 +175,12 @@ Use structured error categories rather than arbitrary strings. Capture non-sensi
 - integration smoke tests
 - APK build
 - install/launch smoke test on representative Android devices
+
+### Export and diagnostics
+- user-data export must be versioned and deterministic
+- diagnostic export must redact credentials and secrets
+- exported files must have stable MIME types and filenames
+- save/share operations must be exercised on Android before release
 
 ## Dependency discipline
 

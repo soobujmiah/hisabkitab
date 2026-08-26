@@ -1,11 +1,11 @@
-# HisabKitab Financial Model
+# Songjog Financial Model
 
 **Status:** Product requirement / design contract
 **Scope:** Product/service sales, commission-based services, private cost, margin, daily/monthly/yearly reporting
 
 ## 1. Core principle
 
-HisabKitab is a business bookkeeping layer. It does not need to reproduce transactions already authoritative in external platforms such as bKash, Nagad, mobile recharge, or other service-provider systems.
+Songjog is a business bookkeeping layer. It does not need to reproduce transactions already authoritative in external platforms such as bKash, Nagad, mobile recharge, or other service-provider systems.
 
 A business owner may nevertheless record the operational details needed for their own business history and profitability analysis.
 
@@ -72,7 +72,7 @@ The transaction should preserve the cost basis used at the time of sale so histo
 
 ## 5. MFS / recharge / agent-style services
 
-HisabKitab does not claim to be the source of truth for an external MFS transaction.
+Songjog does not claim to be the source of truth for an external MFS transaction.
 
 A business user may record an operational service entry such as:
 
@@ -167,7 +167,7 @@ The resulting reports must reflect returns rather than treating them as unexplai
 
 ## 11. Non-goals
 
-For the initial product, HisabKitab does not promise:
+For the initial product, Songjog does not promise:
 
 - automatic access to private bKash/Nagad provider ledgers
 - imitation of external provider transaction systems

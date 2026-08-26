@@ -1,4 +1,4 @@
-# HisabKitab Domain Foundation
+# Songjog Domain Foundation
 
 ## Goal
 
@@ -22,7 +22,7 @@ A transaction has a stable internal ID and human-facing number. Sales can contai
 
 Payment is separate from the sale so the system can represent full payment, partial payment, due, mixed payment and later settlement. Reference fields are optional unless a workflow explicitly requires them.
 
-For MFS/recharge/service businesses, a service transaction may record amount/quantity and an optional customer/reference value such as a mobile number. The external MFS provider remains the authoritative source for its own transfer; HisabKitab records the business's operational sale/service history and profit where applicable.
+For MFS/recharge/service businesses, a service transaction may record amount/quantity and an optional customer/reference value such as a mobile number. The external MFS provider remains the authoritative source for its own transfer; Songjog records the business's operational sale/service history and profit where applicable.
 
 ## Privacy boundary
 
