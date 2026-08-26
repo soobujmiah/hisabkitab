@@ -6,10 +6,13 @@ import 'export_manifest.dart';
 class UserDataExport {
   const UserDataExport._();
 
+  /// [clock] is injectable so the manifest timestamp (and therefore the
+  /// serialized export) is deterministic in tests.
   static Future<String> toJson({
     required LocalStore store,
     DateTime? start,
     DateTime? end,
+    DateTime Function()? clock,
   }) async {
     final profile = await store.loadBusinessProfile();
     final transactions = await store.loadTransactions();
@@ -21,7 +24,7 @@ class UserDataExport {
 
     final manifest = ExportManifest(
       schemaVersion: 1,
-      createdAt: DateTime.now(),
+      createdAt: (clock ?? DateTime.now)(),
       kind: 'user_data',
       sections: const ['business_profile', 'transactions', 'transaction_lines'],
     );

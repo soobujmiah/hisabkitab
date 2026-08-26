@@ -1,20 +1,31 @@
 import 'dart:convert';
 
 import 'diagnostic_report.dart';
-import 'export_filename.dart';
-import 'export_type.dart';
 
+/// Serializes a [DiagnosticReport] into the stable JSON export format.
 class DiagnosticExport {
   const DiagnosticExport._();
 
-  static String toJson({required DiagnosticReport report}) {
+  /// [filename] must be the exact filename used for the exported file
+  /// (normally produced by [exportFilename]) so the payload, the file, and
+  /// the manifest entry always agree.
+  static String toJson({
+    required DiagnosticReport report,
+    required String filename,
+  }) {
     return const JsonEncoder.withIndent('  ').convert({
       'kind': 'diagnostic',
-      'filename': exportFilename(
-        type: ExportType.diagnostic,
-        createdAt: DateTime.now(),
-      ),
+      'filename': filename,
       'report': report.toMap(),
     });
+  }
+
+  static bool isDiagnosticPayload(String content) {
+    try {
+      final decoded = jsonDecode(content);
+      return decoded is Map && decoded['kind'] == 'diagnostic';
+    } catch (_) {
+      return false;
+    }
   }
 }
