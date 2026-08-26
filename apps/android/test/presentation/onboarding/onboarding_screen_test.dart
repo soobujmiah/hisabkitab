@@ -10,7 +10,7 @@ void main() {
   late InMemoryStore store;
   late OnboardingService service;
 
-  Finder get saveButton =>
+  Finder saveButtonFinder() =>
       find.widgetWithText(FilledButton, AppText.get(AppLocale.bangla, 'continue'));
 
   Future<void> pumpScreen(WidgetTester tester) async {
@@ -30,7 +30,7 @@ void main() {
   testWidgets('save is disabled while the workspace name is empty',
       (tester) async {
     await pumpScreen(tester);
-    final button = tester.widget<FilledButton>(saveButton);
+    final button = tester.widget<FilledButton>(saveButtonFinder());
     expect(button.onPressed, isNull);
   });
 
@@ -38,7 +38,7 @@ void main() {
     await pumpScreen(tester);
     await tester.enterText(find.byType(TextField).first, '   ');
     await tester.pump();
-    final button = tester.widget<FilledButton>(saveButton);
+    final button = tester.widget<FilledButton>(saveButtonFinder());
     expect(button.onPressed, isNull);
   });
 
@@ -47,9 +47,9 @@ void main() {
     await pumpScreen(tester);
     await tester.enterText(find.byType(TextField).first, 'Demo Shop');
     await tester.pump();
-    expect(tester.widget<FilledButton>(saveButton).onPressed, isNotNull);
+    expect(tester.widget<FilledButton>(saveButtonFinder()).onPressed, isNotNull);
 
-    await tester.tap(saveButton);
+    await tester.tap(saveButtonFinder());
     await tester.pumpAndSettle();
 
     final profile = await store.loadBusinessProfile();
