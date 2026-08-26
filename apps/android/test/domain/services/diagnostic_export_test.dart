@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import '../../../lib/domain/services/diagnostic_event.dart';
 import '../../../lib/domain/services/diagnostic_export.dart';
 import '../../../lib/domain/services/diagnostic_report.dart';
-oid main() {
+void main() {
   test('serializes diagnostic report without secrets', () {
     final report = DiagnosticReport(
       appVersion: '0.1.0',

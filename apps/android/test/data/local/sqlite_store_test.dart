@@ -2,9 +2,10 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:hisabkitab/data/local/sqlite_store.dart';
-import 'package:hisabkitab/domain/models/business_profile.dart';
-import 'package:hisabkitab/domain/models/transaction.dart';
+import 'package:songjog/data/local/sqlite_store.dart';
+import 'package:songjog/domain/models/business_profile.dart';
+import 'package:songjog/domain/models/transaction.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() {
   late Directory tempDirectory;
@@ -14,6 +15,7 @@ void main() {
     tempDirectory = await Directory.systemTemp.createTemp('songjog_sqlite_');
     store = await SqliteStore.open(
       databasePath: '${tempDirectory.path}/songjog_test.db',
+      factory: databaseFactoryFfiNoIsolate,
     );
   });
 
@@ -35,6 +37,7 @@ void main() {
 
     store = await SqliteStore.open(
       databasePath: '${tempDirectory.path}/songjog_test.db',
+      factory: databaseFactoryFfiNoIsolate,
     );
     expect(await store.loadBusinessProfile(), profile);
   });
@@ -69,6 +72,7 @@ void main() {
     await store.close();
     store = await SqliteStore.open(
       databasePath: '${tempDirectory.path}/songjog_test.db',
+      factory: databaseFactoryFfiNoIsolate,
     );
 
     final loaded = await store.loadTransactions();

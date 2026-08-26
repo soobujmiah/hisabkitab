@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../application/onboarding/onboarding_service.dart';
 import '../../application/onboarding/workspace_fields.dart';
 import '../../domain/models/business_profile.dart';
-import '../l10n/app_text.dart';
+import '../../l10n/app_text.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key, required this.service, this.locale = AppLocale.bangla});

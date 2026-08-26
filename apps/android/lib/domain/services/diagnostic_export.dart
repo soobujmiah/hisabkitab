@@ -12,7 +12,7 @@ class DiagnosticExport {
       'kind': 'diagnostic',
       'filename': exportFilename(
         type: ExportType.diagnostic,
-        now: DateTime.now(),
+        createdAt: DateTime.now(),
       ),
       'report': report.toMap(),
     });

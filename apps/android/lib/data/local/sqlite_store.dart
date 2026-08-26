@@ -13,17 +13,28 @@ class SqliteStore implements LocalStore {
 
   final Database _db;
 
-  static Future<SqliteStore> open({String? databasePath}) async {
-    final path = databasePath ?? p.join(await getDatabasesPath(), databaseName);
-    final db = await openDatabase(
+  /// Opens the durable database.
+  ///
+  /// [factory] is injectable so tests can run against an in-memory or file
+  /// backed FFI SQLite implementation without platform channels.
+  static Future<SqliteStore> open({
+    String? databasePath,
+    DatabaseFactory? factory,
+  }) async {
+    final effectiveFactory = factory ?? databaseFactory;
+    final path = databasePath ??
+        p.join(await effectiveFactory.getDatabasesPath(), databaseName);
+    final db = await effectiveFactory.openDatabase(
       path,
-      version: databaseVersion,
-      onConfigure: (database) async {
-        await database.execute('PRAGMA foreign_keys = ON');
-      },
-      onCreate: (database, version) => _createSchema(database),
-      onUpgrade: (database, oldVersion, newVersion) =>
-          _upgradeSchema(database, oldVersion, newVersion),
+      options: OpenDatabaseOptions(
+        version: databaseVersion,
+        onConfigure: (database) async {
+          await database.execute('PRAGMA foreign_keys = ON');
+        },
+        onCreate: (database, version) => _createSchema(database),
+        onUpgrade: (database, oldVersion, newVersion) =>
+            _upgradeSchema(database, oldVersion, newVersion),
+      ),
     );
     return SqliteStore._(db);
   }

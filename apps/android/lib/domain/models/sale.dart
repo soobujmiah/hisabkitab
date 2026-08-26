@@ -35,7 +35,7 @@ class Sale {
   int get subtotal => items.fold(0, (sum, item) => sum + item.subtotal);
   int get discount => items.fold(0, (sum, item) => sum + item.discount);
   int get total => items.fold(0, (sum, item) => sum + item.total);
-  int get due => total - amountPaid;
+  int get due => (total - amountPaid).clamp(0, 1 << 62);
 
   bool get isPaid => due <= 0;
 }

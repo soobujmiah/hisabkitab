@@ -3,7 +3,7 @@ import 'package:songjog/domain/models/sale.dart';
 
 void main() {
   test('calculates subtotal, discount, total and due for multiple items', () {
-    const sale = Sale(
+    final sale = Sale(
       id: 'sale-1',
       createdAt: DateTime(2026, 8, 26),
       amountPaid: 100,
@@ -27,7 +27,7 @@ void main() {
   });
 
   test('paid sale never reports a negative due amount as unpaid', () {
-    const sale = Sale(
+    final sale = Sale(
       id: 'sale-2',
       createdAt: DateTime(2026, 8, 26),
       amountPaid: 500,
@@ -36,7 +36,7 @@ void main() {
       ],
     );
 
-    expect(sale.due, 200);
-    expect(sale.isPaid, isFalse);
+    expect(sale.due, 0);
+    expect(sale.isPaid, isTrue);
   });
 }
