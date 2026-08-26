@@ -19,13 +19,14 @@ only when every gate below shows verified evidence.
 | Item | Value |
 |---|---|
 | Branch | `feature/android-owner-mvp` |
-| Checkpoint commit | `3560726` |
-| CI workflow | `Flutter CI` — run [32957912379](https://github.com/soobujmiah/songjog/actions/runs/32957912379) |
+| Checkpoint commit | `8e21317` |
+| CI workflow | `Flutter CI` — run [32960136813](https://github.com/soobujmiah/songjog/actions/runs/32960136813) — **all jobs success** |
 | Pinned toolchain | Flutter 3.47.1 (Dart 3.13.1), Java 21, AGP 9.1.0, Gradle 9.3.1 |
 | Analyze | clean (no issues) — CI job `Analyze + unit/widget tests`: success |
 | Tests | 48/48 passed (unit + widget; SQLite exercised via sqflite_common_ffi) — CI job: success |
 | APK | `flutter build apk --debug` → `app-debug.apk` (156 MB debug) uploaded as artifact `songjog-debug-apk` |
 | APK badging (aapt) | `package: com.songjog.songjog` `versionName=0.1.0` `versionCode=1` `minSdk=24` `targetSdk=36` `application-label: Songjog` |
+| Legacy-name audit | success (no leakage outside historical documents) |
 | Application identity | `com.songjog.songjog`, launcher label `Songjog` |
 | Version | `0.1.0 (1)` (pubspec `version:`) |
 
@@ -96,9 +97,10 @@ only when every gate below shows verified evidence.
 
 ## Result
 
-**Status: PENDING PHYSICAL DEVICE TEST** — automated gates are green on
-commit `3560726`; the device checklist above must be executed by the owner
-on the Redmi Turbo 4 Pro before the milestone is closed.
+**Status: READY FOR PHYSICAL DEVICE TEST** — all automated gates are green
+on commit `8e21317` (analyze, 48/48 tests, debug APK built and uploaded,
+legacy-name audit). The device checklist above must be executed by the owner
+on the Redmi Turbo 4 Pro to close the milestone.
 
 ## Branch state (as of this checkpoint)
 
