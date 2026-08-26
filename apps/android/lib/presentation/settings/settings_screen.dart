@@ -123,33 +123,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           const SizedBox(height: 8),
           Card(
-            child: Column(
-              children: [
-                RadioListTile<AppLocale>(
-                  title: Text(t('language_bangla')),
-                  value: AppLocale.bangla,
-                  groupValue: widget.locale,
-                  onChanged: (value) {
-                    if (value != null) {
-                      widget.onLocaleChanged?.call(value);
-                      // Close settings and reopen with new locale via parent rebuild
-                      Navigator.of(context).pop();
-                    }
-                  },
-                ),
-                const Divider(height: 1),
-                RadioListTile<AppLocale>(
-                  title: Text(t('language_english')),
-                  value: AppLocale.english,
-                  groupValue: widget.locale,
-                  onChanged: (value) {
-                    if (value != null) {
-                      widget.onLocaleChanged?.call(value);
-                      Navigator.of(context).pop();
-                    }
-                  },
-                ),
-              ],
+            child: RadioGroup<AppLocale>(
+              groupValue: widget.locale,
+              onChanged: (value) {
+                if (value != null) {
+                  widget.onLocaleChanged?.call(value);
+                  Navigator.of(context).pop();
+                }
+              },
+              child: Column(
+                children: [
+                  RadioListTile<AppLocale>(
+                    title: Text(t('language_bangla')),
+                    value: AppLocale.bangla,
+                  ),
+                  const Divider(height: 1),
+                  RadioListTile<AppLocale>(
+                    title: Text(t('language_english')),
+                    value: AppLocale.english,
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 16),
