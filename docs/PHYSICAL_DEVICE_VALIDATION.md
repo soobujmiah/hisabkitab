@@ -67,7 +67,7 @@ only when every gate below shows verified evidence.
 
 ### Export — user data
 - [ ] Record at least one business profile and one transaction first.
-      — profile created on-device via onboarding (`onboarding_save`: institution / retail); a recorded transaction not yet confirmed.
+      — business profile recorded on-device via onboarding (institution/retail 10:42:28, business/retail 10:46:19 — record 2). Transaction: no transaction-entry UI exists in this build; the domain model + unit tests cover it, entry UI is a later release gate (see `RELEASE_GATES.md`).
 - [x] Settings → Export my data completes (progress → success snackbar).
       — proven: `export_userData` success event with saved filename in the on-device log.
 - [x] File `songjog_data_<UTC>.json` exists in
@@ -75,9 +75,9 @@ only when every gate below shows verified evidence.
       — proven: the adapter records `export_userData` only after a successful write (`songjog_data_20260826_104324.json`).
 - [ ] File opens/reads as valid JSON; content includes the business profile
   and the recorded transaction.
-      — `songjog_data_20260826_104324.json` not yet returned by the owner.
-- [ ] Share action opens the Android share sheet with the file.
-      — owner confirmation pending.
+      — the data-export file not yet returned by the owner (content of the "recorded transaction" sub-item is N/A in this build — see item above).
+- [x] Share action opens the Android share sheet with the file.
+      — proven (record 2): `share_export` `dispatched` events for the diagnostic files; an earlier data-file attempt was recorded as `share not completed` (dismissed) — success and dismissal are distinguished in the log.
 
 ### Export — diagnostics
 - [x] Settings → Export diagnostics completes.
@@ -95,21 +95,23 @@ only when every gate below shows verified evidence.
 - [x] Debug-only *Record a test diagnostic event* writes an event that
   appears in the next diagnostic export.
       — proven: two `test_event` records (10:42:42, 10:42:44 UTC) requested from Settings appear in the artifact.
-- [ ] Force a controlled failure (e.g. storage unavailable) if practical,
+- [x] Force a controlled failure (e.g. storage unavailable) if practical,
   or rely on the test event + any real errors captured by the global
   handlers; verify error records and stack traces appear without secrets.
-      — test-event branch satisfied; no real error occurred in this session (clean run), so the error/stack-trace path is not yet exercised on-device (covered by unit tests: collector error events + redaction).
+      — proven (record 2): three real `onboarding_save` rejections captured on-device as `error` records with full 17-frame stack traces; secret scan of the file (including the traces): no matches.
 
 ### Android behavior
 - [ ] No runtime permission prompts required for export/share
   (app-specific storage + FileProvider).
       — export completed without permission errors; owner to confirm no prompt appeared.
-- [ ] Share sheet accepts the file and a target app can open it.
+- [x] Share sheet accepts the file and a target app can open it.
+      — evidence (record 2): two `share_export` `dispatched` (success) results; both diagnostic files the owner sent in this engagement arrived through this in-app share path, i.e. a target app received and used them.
 - [ ] App survives background/foreground and configuration change;
   exports remain available after relaunch (persistent log + file system).
-- [ ] Restart the app: diagnostic export still contains `app_start` events
+      — partial evidence (record 2): the app stayed usable across a long session and the owner re-shared a 10:43 file at 10:46 (file system intact); explicit rotation/background confirmation still pending.
+- [x] Restart the app: diagnostic export still contains `app_start` events
   from the previous session (persistent log).
-      — the artifact contains exactly one `app_start`; no restart has been performed yet.
+      — proven (record 2): the post-restart export contains both `app_start` events (10:38:38 session 1, 11:55:02 session 2) — all eight session-1 events survived the process restart.
 
 ## Device test record — 2026-08-26 (Redmi Turbo 4 Pro)
 
@@ -152,28 +154,87 @@ secret-matching keys or values anywhere in the file.
   the export.
 - The export contains no secrets (full key/value scan).
 
-### Not yet proven (owner confirmation required)
+### Not yet proven at the time of this record
 
 - Visual: launcher name **Songjog**, and no HisabKitab identity anywhere in
-  the UI (Bangla and English).
-- Share sheet opens after export, and a target app can open the file.
-- No permission prompt appeared during export/share.
-- Restart persistence: force-stop → relaunch → a new diagnostic export must
-  show two `app_start` events (this artifact has exactly one).
-- Content of the user-data export (profile + any transaction):
-  `songjog_data_20260826_104324.json` not yet returned.
+  the UI (Bangla and English). — still pending.
+- Share sheet opens after export, and a target app can open the file. — resolved in record 2.
+- No permission prompt appeared during export/share. — still pending.
+- Restart persistence (two `app_start` events after force-stop). — resolved in record 2.
+- Content of the user-data export: `songjog_data_20260826_104324.json` not yet returned. — still pending.
+
+## Device test record 2 — 2026-08-26, 12:05 UTC (post-restart export)
+
+**Artifact:** [`device-validation/2026-08-26/songjog_diagnostics_20260826_120529.json`](device-validation/2026-08-26/songjog_diagnostics_20260826_120529.json)
+— diagnostic export generated on the device after a force-stop/restart and
+returned by the owner. 35 events across two app sessions. Machine-verified:
+valid JSON, `schema_version` 1, and no secret-matching keys or values
+anywhere in the file — including inside stack traces.
+
+| Field | Value in artifact |
+|---|---|
+| app_version / build_number | `0.1.0` / `1` (same as record 1) |
+| device_model | `Redmi 25053RT47C (onyx)` (same as record 1) |
+| os_version / locale / runtime_mode | `16 (SDK 36)` / `bn` / `debug` |
+
+### Session boundaries (UTC)
+
+| Session | `database_open` | `app_start` | `package_info` |
+|---|---|---|---|
+| 1 (record 1) | 10:38:38.472 | 10:38:38.474 | 10:38:38.487 |
+| 2 (post-restart) | 11:55:02.603 | 11:55:02.605 | 11:55:02.634 |
+
+The 12:05 export still contains **all eight session-1 events** plus 27 new
+ones — the persistent JSONL diagnostic log survived a full process restart,
+and the bounded log (cap 200) held the entire exploration session.
+
+### What this artifact proves (new evidence)
+
+- **Restart persistence gate:** the post-restart diagnostic export contains
+  the previous session's `app_start` (two `app_start` events in total).
+- **Real error capture:** three real `onboarding_save` rejections
+  (`Invalid argument(s): Workspace name is required.`), each an
+  `error`-level record with a full 17-frame stack trace
+  (`OnboardingService.createOwnerWorkspace` → `_OnboardingScreenState._save`),
+  no secrets in the traces. The app remained fully functional after each
+  rejection (second workspace created at 10:46:19).
+- **Share path:** `share_export` `dispatched` (success) at 10:45:24 and
+  10:46:58 for diagnostic files; an earlier data-file attempt at 10:44:22 was
+  recorded as `share not completed` (dismissed) — success and dismissal are
+  distinguishable in the log. Both diagnostic files the owner sent in this
+  engagement arrived through exactly this in-app share path, proving a target
+  app can receive and use the shared file.
+- **Pipeline exercised on-device:** 4 controlled test events, 4 user-data
+  exports, 13 diagnostic exports, 5 onboarding saves (2 successes:
+  institution/retail 10:42:28, business/retail 10:46:19) — all recorded
+  within the event bound.
+
+### Findings (recorded; not milestone blockers)
+
+1. **UX — empty-name validation:** the onboarding save button is tappable
+   with an empty workspace name; the service rejects with an
+   `ArgumentError` (recorded in diagnostics + shown as failure feedback, no
+   crash). Follow-up for a later release: client-side validation (disable
+   save / inline field error) so the rejection never happens.
+2. **Scope — transaction entry UI** is not part of this build; the
+   checklist's "record one transaction" item is covered at the domain level
+   (model + unit tests), with entry UI in a later release gate (see
+   `RELEASE_GATES.md`).
 
 ## Result
 
-**Status: PHYSICAL DEVICE TEST IN PROGRESS** — all automated gates are green
-on commit `8e21317` (analyze, 48/48 tests, debug APK built and uploaded,
-legacy-name audit). On-device validation started 2026-08-26 on the Redmi
-Turbo 4 Pro: the first artifact (diagnostic export) is recorded above and
-confirms installation, launch, database open, onboarding, both export paths,
-and controlled test events in Bangla mode. Remaining checklist items: visual
-identity check, share sheet, permission-prompt confirmation, restart
-persistence, and user-data export content. The milestone closes when every
-checklist box is checked with evidence.
+**Status: PHYSICAL DEVICE TEST — NEARLY COMPLETE** — all automated gates are
+green on commit `8e21317` (analyze, 48/48 tests, debug APK built and
+uploaded, legacy-name audit). On-device validation on the Redmi Turbo 4 Pro
+has produced two artifacts (records 1 and 2). Verified with on-device
+evidence: installation, launch, real SQLite, onboarding, user-data export,
+diagnostic export, controlled test events, share sheet (success and dismiss
+states), restart persistence of the diagnostic log, and real error capture
+with full stack traces — all in Bangla mode, all free of secrets. Remaining:
+owner confirmations for (a) launcher name **Songjog** / no HisabKitab
+identity visible, (b) no permission prompt, (c) rotation/background
+survival, and (d) content of the user-data export. The milestone closes when
+every checklist box is checked with evidence.
 
 ## Branch state (as of this checkpoint)
 
