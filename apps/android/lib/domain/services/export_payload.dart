@@ -9,3 +9,8 @@ class ExportPayload {
   final String mimeType;
   final String content;
 }
+
+abstract interface class ExportFileAdapter {
+  Future<String> save(ExportPayload payload);
+  Future<void> share(ExportPayload payload);
+}
