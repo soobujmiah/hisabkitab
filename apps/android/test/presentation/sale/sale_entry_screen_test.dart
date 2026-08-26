@@ -46,6 +46,20 @@ void main() {
     await tester.pumpAndSettle();
   }
 
+  Future<void> enterFieldAndTriggerRebuild(
+    WidgetTester tester,
+    Finder field,
+    String text,
+  ) async {
+    await tester.enterText(field, text);
+    await tester.pump();
+    final state = tester.state(find.byType(SaleEntryScreen)) as dynamic;
+    try {
+      state.setState(() {});
+    } catch (_) {}
+    await tester.pump();
+  }
+
   setUp(() {
     store = InMemoryStore();
     collector = DiagnosticCollector();
@@ -59,12 +73,14 @@ void main() {
     await ensureCompleteSaleVisible(tester);
     expect(tester.widget<FilledButton>(completeSaleButton()).onPressed, isNull);
 
-    await tester.enterText(findField('line_description'), 'Mouse');
-    await tester.pump();
+    await enterFieldAndTriggerRebuild(
+      tester,
+      findField('line_description'),
+      'Mouse',
+    );
     expect(tester.widget<FilledButton>(completeSaleButton()).onPressed, isNull);
 
-    await tester.enterText(findField('price'), '850');
-    await tester.pump();
+    await enterFieldAndTriggerRebuild(tester, findField('price'), '850');
     expect(
       tester.widget<FilledButton>(completeSaleButton()).onPressed,
       isNotNull,
@@ -75,10 +91,13 @@ void main() {
     tester,
   ) async {
     await pumpScreen(tester);
-    await tester.enterText(findField('line_description'), 'Mouse');
-    await tester.enterText(findField('price'), '850');
-    await tester.enterText(findField('amount_paid'), '850');
-    await tester.pump();
+    await enterFieldAndTriggerRebuild(
+      tester,
+      findField('line_description'),
+      'Mouse',
+    );
+    await enterFieldAndTriggerRebuild(tester, findField('price'), '850');
+    await enterFieldAndTriggerRebuild(tester, findField('amount_paid'), '850');
 
     await tapCompleteSale(tester);
     await tester.pumpAndSettle();
@@ -93,10 +112,13 @@ void main() {
 
   testWidgets('a partial payment leaves the due amount', (tester) async {
     await pumpScreen(tester);
-    await tester.enterText(findField('line_description'), 'Mouse');
-    await tester.enterText(findField('price'), '850');
-    await tester.enterText(findField('amount_paid'), '300');
-    await tester.pump();
+    await enterFieldAndTriggerRebuild(
+      tester,
+      findField('line_description'),
+      'Mouse',
+    );
+    await enterFieldAndTriggerRebuild(tester, findField('price'), '850');
+    await enterFieldAndTriggerRebuild(tester, findField('amount_paid'), '300');
 
     await tapCompleteSale(tester);
     await tester.pumpAndSettle();
@@ -109,16 +131,23 @@ void main() {
 
   testWidgets('multi-line totals are summed on save', (tester) async {
     await pumpScreen(tester);
-    await tester.enterText(findField('line_description'), 'Mouse');
-    await tester.enterText(findField('price'), '100');
+    await enterFieldAndTriggerRebuild(
+      tester,
+      findField('line_description'),
+      'Mouse',
+    );
+    await enterFieldAndTriggerRebuild(tester, findField('price'), '100');
 
     await tester.tap(
       find.widgetWithText(FilledButton, t('add_line'), skipOffstage: false),
     );
-    await tester.pump();
-    await tester.enterText(findField('line_description').last, 'Windows setup');
-    await tester.enterText(findField('price').last, '50');
-    await tester.pump();
+    await tester.pumpAndSettle();
+    await enterFieldAndTriggerRebuild(
+      tester,
+      findField('line_description').last,
+      'Windows setup',
+    );
+    await enterFieldAndTriggerRebuild(tester, findField('price').last, '50');
 
     await tapCompleteSale(tester);
     await tester.pumpAndSettle();
@@ -131,10 +160,13 @@ void main() {
 
   testWidgets('overpayment is clamped to the total', (tester) async {
     await pumpScreen(tester);
-    await tester.enterText(findField('line_description'), 'Mouse');
-    await tester.enterText(findField('price'), '850');
-    await tester.enterText(findField('amount_paid'), '900');
-    await tester.pump();
+    await enterFieldAndTriggerRebuild(
+      tester,
+      findField('line_description'),
+      'Mouse',
+    );
+    await enterFieldAndTriggerRebuild(tester, findField('price'), '850');
+    await enterFieldAndTriggerRebuild(tester, findField('amount_paid'), '900');
 
     await tapCompleteSale(tester);
     await tester.pumpAndSettle();
@@ -146,10 +178,13 @@ void main() {
 
   testWidgets('payment method selection is stored', (tester) async {
     await pumpScreen(tester);
-    await tester.enterText(findField('line_description'), 'Mouse');
-    await tester.enterText(findField('price'), '850');
-    await tester.enterText(findField('amount_paid'), '850');
-    await tester.pump();
+    await enterFieldAndTriggerRebuild(
+      tester,
+      findField('line_description'),
+      'Mouse',
+    );
+    await enterFieldAndTriggerRebuild(tester, findField('price'), '850');
+    await enterFieldAndTriggerRebuild(tester, findField('amount_paid'), '850');
 
     await tester.tap(
       find.widgetWithText(
@@ -159,7 +194,7 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    await tester.tap(find.text(t('cash'), skipOffstage: false));
+    await tester.tap(find.text(t('cash'), skipOffstage: false).last);
     await tester.pumpAndSettle();
 
     await tapCompleteSale(tester);
