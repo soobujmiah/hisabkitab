@@ -243,6 +243,23 @@ void main() {
     expect(content, contains('app started'));
   });
 
+  testWidgets('language options are visible and reachable', (tester) async {
+    await tester.pumpWidget(SongjogApp(services: services));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip(AppText.get(AppLocale.bangla, 'settings')));
+    await tester.pumpAndSettle();
+
+    expect(find.text(AppText.get(AppLocale.bangla, 'language')), findsOneWidget);
+    expect(
+      find.text(AppText.get(AppLocale.bangla, 'language_bangla')),
+      findsOneWidget,
+    );
+    expect(
+      find.text(AppText.get(AppLocale.bangla, 'language_english')),
+      findsOneWidget,
+    );
+  });
+
   testWidgets('a failing store shows the error state and records it',
       (tester) async {
     final throwing = _ThrowingStore();

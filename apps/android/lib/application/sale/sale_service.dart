@@ -9,10 +9,10 @@ import '../../domain/services/diagnostic_collector.dart';
 /// floating point ever touches money (see docs/FINANCIAL_MODEL.md §9).
 ///
 /// Only non-negative amounts are supported here; sale entry does not accept
-/// negatives.
+/// negatives. Accepts both Latin and Bangla digits.
 int takaToMinor(String raw) {
-  final text = raw.trim();
-  final match = RegExp(r'^(\d{1,12})(?:\.(\d{1,2}))?$').firstMatch(text);
+  final latinText = toLatinDigits(raw.trim());
+  final match = RegExp(r'^(\d{1,12})(?:\.(\d{1,2}))?$').firstMatch(latinText);
   if (match == null) {
     throw FormatException('Invalid amount: $raw');
   }
@@ -44,6 +44,18 @@ String toBanglaDigits(String input) {
   var result = input;
   for (var i = 0; i < 10; i++) {
     result = result.replaceAll(latin[i], bangla[i]);
+  }
+  return result;
+}
+
+/// Converts Bangla digits ০-৯ in [input] to Latin digits 0-9.
+/// Keeps other characters unchanged. Used for parsing user input that may contain Bangla numerals.
+String toLatinDigits(String input) {
+  const latin = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  const bangla = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+  var result = input;
+  for (var i = 0; i < 10; i++) {
+    result = result.replaceAll(bangla[i], latin[i]);
   }
   return result;
 }

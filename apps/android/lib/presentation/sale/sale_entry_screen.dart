@@ -6,10 +6,11 @@ import '../../domain/models/transaction.dart';
 import '../../l10n/app_text.dart';
 
 class _LineState {
-  _LineState() {
-    quantity.text = '1';
+  _LineState({this.locale = AppLocale.bangla}) {
+    quantity.text = locale == AppLocale.bangla ? '১' : '1';
   }
 
+  final AppLocale locale;
   final description = TextEditingController();
   final quantity = TextEditingController();
   final price = TextEditingController();
@@ -23,7 +24,8 @@ class _LineState {
   bool get hasDescription => description.text.trim().isNotEmpty;
 
   double? get parsedQuantity {
-    final value = double.tryParse(quantity.text.trim());
+    final latin = toLatinDigits(quantity.text.trim());
+    final value = double.tryParse(latin);
     return (value == null || value <= 0) ? null : value;
   }
 
@@ -48,6 +50,26 @@ class _LineState {
   bool get complete => hasDescription && lineTotalMinor != null;
 }
 
+class _BanglaDigitFormatter extends TextInputFormatter {
+  _BanglaDigitFormatter(this.locale);
+  final AppLocale locale;
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    if (locale != AppLocale.bangla) return newValue;
+    // Allow both Latin and Bangla digits, but display as Bangla in bn mode
+    final converted = toBanglaDigits(newValue.text);
+    return newValue.copyWith(
+      text: converted,
+      selection: newValue.selection,
+      composing: TextRange.empty,
+    );
+  }
+}
+
 class SaleEntryScreen extends StatefulWidget {
   const SaleEntryScreen({
     super.key,
@@ -63,8 +85,8 @@ class SaleEntryScreen extends StatefulWidget {
 }
 
 class _SaleEntryScreenState extends State<SaleEntryScreen> {
-  final _lines = <_LineState>[
-    _LineState(),
+  late final List<_LineState> _lines = [
+    _LineState(locale: widget.locale),
   ];
   final _paid = TextEditingController();
   PaymentMethod? _method;
@@ -104,7 +126,7 @@ class _SaleEntryScreenState extends State<SaleEntryScreen> {
   }
 
   void _addLine() {
-    final newLine = _LineState();
+    final newLine = _LineState(locale: widget.locale);
     _attachLineListeners(newLine);
     setState(() => _lines.add(newLine));
   }
@@ -230,7 +252,9 @@ class _SaleEntryScreenState extends State<SaleEntryScreen> {
                       keyboardType: const TextInputType.numberWithOptions(
                           decimal: true),
                       inputFormatters: [
-                        FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
+                        FilteringTextInputFormatter.allow(
+                            RegExp(r'[0-9\u09E6-\u09EF.]')),
+                        _BanglaDigitFormatter(widget.locale),
                       ],
                       decoration: InputDecoration(
                         labelText: t('amount_paid'),
@@ -356,7 +380,9 @@ class _SaleEntryScreenState extends State<SaleEntryScreen> {
                     keyboardType: const TextInputType.numberWithOptions(
                         decimal: true),
                     inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
+                      FilteringTextInputFormatter.allow(
+                          RegExp(r'[0-9\u09E6-\u09EF.]')),
+                      _BanglaDigitFormatter(widget.locale),
                     ],
                     decoration: InputDecoration(labelText: t('quantity')),
                   ),
@@ -368,7 +394,9 @@ class _SaleEntryScreenState extends State<SaleEntryScreen> {
                     keyboardType: const TextInputType.numberWithOptions(
                         decimal: true),
                     inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
+                      FilteringTextInputFormatter.allow(
+                          RegExp(r'[0-9\u09E6-\u09EF.]')),
+                      _BanglaDigitFormatter(widget.locale),
                     ],
                     decoration: InputDecoration(labelText: t('price')),
                   ),
