@@ -1,6 +1,6 @@
-# HisabKitab
+# Songjog (সংযোগ)
 
-HisabKitab is an Android-first, Bengali-first business and institution operations app for shops, service businesses, and later education/training institutions.
+Songjog (সংযোগ) is an Android-first, Bengali-first business and institution operations app for shops, service businesses, and later education/training and healthcare institutions.
 
 ## Product promise
 
@@ -10,7 +10,7 @@ The Owner Edition prioritizes extremely fast daily entry, reliable financial rec
 
 ## Current product boundary
 
-The first commercial release is Owner Edition. Staff/team, public storefront, advanced integrations, and institution-specific workflows are architecturally prepared but must not delay the first owner release.
+The first commercial release is Owner Edition. Staff/team, customer/student/guardian experiences, public-facing features, advanced integrations, education/training workflows, and healthcare workflows are architecturally prepared but must not delay the first owner release.
 
 ## Non-negotiables
 
