@@ -1,6 +1,6 @@
-name: hisabkitab
+name: songjog
 publish_to: 'none'
-description: Owner-first business bookkeeping for Bangladesh small businesses.
+description: Songjog — owner-first business, service, education and institution management.
 version: 0.1.0+1
 
 environment:
