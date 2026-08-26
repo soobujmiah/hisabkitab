@@ -59,7 +59,7 @@ void main() {
 
     final path = await adapter.save(payload);
 
-    final names = await tempDirectory.listSync().map((e) => e.path).toList();
+    final names = tempDirectory.listSync().map((e) => e.path).toList();
     expect(names.length, 1);
     expect(names.single, endsWith(payload.filename));
     expect(path, endsWith(payload.filename));

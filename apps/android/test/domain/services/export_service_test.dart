@@ -21,7 +21,7 @@ class _FakeReportSource implements DiagnosticReportSource {
 void main() {
   final fixedClock = DateTime.utc(2026, 8, 26, 10, 30, 45);
 
-  Future<LocalStore> _storeWithTransaction() async {
+  Future<LocalStore> storeWithTransaction() async {
     final store = InMemoryStore();
     await store.saveBusinessProfile(const BusinessProfile(
       id: 'p1',
@@ -47,7 +47,7 @@ void main() {
     return store;
   }
 
-  DiagnosticReport _report(List<DiagnosticEvent> events) {
+  DiagnosticReport makeReport(List<DiagnosticEvent> events) {
     return DiagnosticReport(
       appVersion: '0.1.0',
       buildNumber: '1',
@@ -63,7 +63,7 @@ void main() {
   group('DefaultExportService user data', () {
     test('produces a deterministic JSON payload with stable filename and MIME', () async {
       final service = DefaultExportService(
-        store: await _storeWithTransaction(),
+        store: await storeWithTransaction(),
         clock: () => fixedClock,
       );
 
@@ -82,7 +82,7 @@ void main() {
 
     test('applies date-range filtering to exported transactions', () async {
       final service = DefaultExportService(
-        store: await _storeWithTransaction(),
+        store: await storeWithTransaction(),
         clock: () => fixedClock,
       );
 
@@ -100,7 +100,7 @@ void main() {
 
     test('rejects a range whose start is after its end', () async {
       final service = DefaultExportService(
-        store: await _storeWithTransaction(),
+        store: await storeWithTransaction(),
       );
       await expectLater(
         service.export(
@@ -120,7 +120,7 @@ void main() {
       final service = DefaultExportService(
         store: InMemoryStore(),
         reportSource: _FakeReportSource(
-          _report([
+          makeReport([
             DiagnosticEvent(
               timestamp: DateTime.utc(2026, 8, 26, 9),
               level: 'error',
@@ -155,7 +155,7 @@ void main() {
       final service = DefaultExportService(
         store: InMemoryStore(),
         reportSource: _FakeReportSource(
-          _report([
+          makeReport([
             DiagnosticEvent(
               timestamp: DateTime.utc(2026, 8, 20),
               level: 'info',
@@ -194,7 +194,7 @@ void main() {
   group('determinism', () {
     test('the same clock produces identical payloads twice', () async {
       final service = DefaultExportService(
-        store: await _storeWithTransaction(),
+        store: await storeWithTransaction(),
         clock: () => fixedClock,
       );
       final first = await service.export(

@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 
-import '../../../lib/domain/services/diagnostic_event.dart';
-import '../../../lib/domain/services/diagnostic_export.dart';
-import '../../../lib/domain/services/diagnostic_report.dart';
+import 'package:songjog/domain/services/diagnostic_event.dart';
+import 'package:songjog/domain/services/diagnostic_export.dart';
+import 'package:songjog/domain/services/diagnostic_report.dart';
 
 void main() {
-  DiagnosticReport _report({
+  DiagnosticReport makeReport({
     List<DiagnosticEvent> events = const [],
     String appVersion = '0.1.0',
     String buildNumber = '1',
@@ -25,7 +25,7 @@ void main() {
   }
 
   test('serializes the full expected diagnostic field set', () {
-    final report = _report(
+    final report = makeReport(
       events: [
         DiagnosticEvent(
           timestamp: DateTime.utc(2026, 1, 1),
@@ -81,11 +81,11 @@ void main() {
       ),
     ];
     final first = DiagnosticExport.toJson(
-      report: _report(events: events),
+      report: makeReport(events: events),
       filename: 'songjog_diagnostics_20260203_040000.json',
     );
     final second = DiagnosticExport.toJson(
-      report: _report(events: events),
+      report: makeReport(events: events),
       filename: 'songjog_diagnostics_20260203_040000.json',
     );
     expect(first, second);
@@ -93,7 +93,7 @@ void main() {
 
   test('empty diagnostic state produces a valid report with no events', () {
     final json = DiagnosticExport.toJson(
-      report: _report(),
+      report: makeReport(),
       filename: 'songjog_diagnostics_20260101_000000.json',
     );
     final decoded = jsonDecode(json) as Map<String, Object?>;
@@ -103,7 +103,7 @@ void main() {
   });
 
   test('error state keeps error records and stack traces', () {
-    final report = _report(
+    final report = makeReport(
       events: [
         DiagnosticEvent(
           timestamp: DateTime.utc(2026, 3, 1),
@@ -126,7 +126,7 @@ void main() {
   });
 
   test('redacts secrets nested in event details', () {
-    final report = _report(
+    final report = makeReport(
       events: [
         DiagnosticEvent(
           timestamp: DateTime.utc(2026, 1, 1),
@@ -153,7 +153,7 @@ void main() {
 
   test('isDiagnosticPayload detects diagnostic exports only', () {
     final json = DiagnosticExport.toJson(
-      report: _report(),
+      report: makeReport(),
       filename: 'songjog_diagnostics_20260101_000000.json',
     );
     expect(DiagnosticExport.isDiagnosticPayload(json), isTrue);
