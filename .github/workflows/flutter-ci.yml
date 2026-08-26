@@ -103,11 +103,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Audit for HisabKitab leakage
+      - name: Audit for legacy product-name leakage
         run: |
           # Current product identity is Songjog/সংযোগ. Legacy references are
           # allowed only in explicit historical/migration documents.
-          HITS="$(grep -rin --exclude-dir=.git --exclude-dir=.dart_tool --exclude-dir=build -e 'hisabkitab' . \
+          # .github is excluded: the audit tool itself names the legacy term.
+          HITS="$(grep -rin --exclude-dir=.git --exclude-dir=.dart_tool --exclude-dir=build --exclude-dir=.github -e 'hisabkitab' . \
             | grep -v '^\./docs/NAME_MIGRATION.md' \
             | grep -v '^\./docs/PRODUCT_SPEC.md' \
             | grep -v '^\./docs/ROADMAP.md' \

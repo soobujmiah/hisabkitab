@@ -4,10 +4,10 @@ A feature is not release-ready because its documentation exists. It must pass th
 
 ## Gate 1 — Foundation
 
-- [ ] Local durable database implemented
+- [x] Local durable database implemented — `SqliteStore` (schema v2), verified by `sqlite_store_test.dart` via sqflite_common_ffi (2026-08-26)
 - [ ] Business/workspace scoping enforced
-- [ ] Migration strategy tested
-- [ ] Offline transaction persistence tested
+- [ ] Migration strategy tested (v1→v2 upgrade path exists in code; no upgrade test yet)
+- [x] Offline transaction persistence tested — profile + multi-line transactions persist across store reopen (2026-08-26)
 
 ## Gate 2 — Owner onboarding
 
