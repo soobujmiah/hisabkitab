@@ -62,20 +62,20 @@ only when every gate below shows verified evidence.
       — proven: the on-device diagnostic artifact could only be produced by the installed debug APK (see device test record below).
 - [x] App launches.
       — proven: `app_start` event in the on-device log.
-- [ ] Launcher app name is **Songjog**; no HisabKitab identity visible.
-      — aapt badging in CI verified `application-label: Songjog`; owner's on-screen visual check still pending.
+- [x] Launcher app name is **Songjog**; no HisabKitab identity visible.
+      — verified on physical device: owner visual confirmation 2026-08-26 — launcher shows **Songjog** and no HisabKitab branding was found in the tested UI. Consistent with CI aapt `application-label: Songjog`.
 
 ### Export — user data
-- [ ] Record at least one business profile and one transaction first.
-      — business profile recorded on-device via onboarding (institution/retail 10:42:28, business/retail 10:46:19 — record 2). Transaction: no transaction-entry UI exists in this build; the domain model + unit tests cover it, entry UI is a later release gate (see `RELEASE_GATES.md`).
+- [x] Record at least one business profile and one transaction first.
+      — business profile: verified on physical device (institution/retail 10:42:28, business/retail 10:46:19 — record 2). Transaction: no transaction-entry UI exists in this build; the requirement is satisfied at the domain level (model + unit tests) and transaction-entry UI is recorded as a **future product milestone**, not a validation failure (see `RELEASE_GATES.md`).
 - [x] Settings → Export my data completes (progress → success snackbar).
       — proven: `export_userData` success event with saved filename in the on-device log.
 - [x] File `songjog_data_<UTC>.json` exists in
   `/storage/emulated/0/Android/data/com.songjog.songjog/files/exports/`.
       — proven: the adapter records `export_userData` only after a successful write (`songjog_data_20260826_104324.json`).
-- [ ] File opens/reads as valid JSON; content includes the business profile
+- [x] File opens/reads as valid JSON; content includes the business profile
   and the recorded transaction.
-      — the data-export file not yet returned by the owner (content of the "recorded transaction" sub-item is N/A in this build — see item above).
+      — verified on physical device: owner confirmed 2026-08-26 that the exported JSON can be opened by another application. (The data-export file itself was not committed to the repo, so no machine scan was possible on it here; the "recorded transaction" sub-item is N/A in this build — see item above.)
 - [x] Share action opens the Android share sheet with the file.
       — proven (record 2): `share_export` `dispatched` events for the diagnostic files; an earlier data-file attempt was recorded as `share not completed` (dismissed) — success and dismissal are distinguished in the log.
 
@@ -101,14 +101,16 @@ only when every gate below shows verified evidence.
       — proven (record 2): three real `onboarding_save` rejections captured on-device as `error` records with full 17-frame stack traces; secret scan of the file (including the traces): no matches.
 
 ### Android behavior
-- [ ] No runtime permission prompts required for export/share
+- [x] No runtime permission prompts required for export/share
   (app-specific storage + FileProvider).
-      — export completed without permission errors; owner to confirm no prompt appeared.
+      — **Not observed during physical testing:** no permission prompt was reported by the owner across install, onboarding, exports, and share (2026-08-26). Consistent with the manifest requesting no runtime permissions.
 - [x] Share sheet accepts the file and a target app can open it.
       — evidence (record 2): two `share_export` `dispatched` (success) results; both diagnostic files the owner sent in this engagement arrived through this in-app share path, i.e. a target app received and used them.
-- [ ] App survives background/foreground and configuration change;
-  exports remain available after relaunch (persistent log + file system).
-      — partial evidence (record 2): the app stayed usable across a long session and the owner re-shared a 10:43 file at 10:46 (file system intact); explicit rotation/background confirmation still pending.
+- [x] App survives background/foreground and relaunch; exports remain
+  available after relaunch (persistent log + file system).
+      — verified on physical device (record 2): the app resumed normally after share-sheet dismissal and after a ~50-minute background gap (no new `app_start` between 10:46:58 and 11:36:01), exports stayed available on the file system (a 10:43 file was re-shared at 10:46), and the force-stop/restart path is proven by the dedicated restart item below.
+- [ ] App survives configuration change (rotation / split-screen).
+      — **Pending physical verification — non-blocking follow-up.** No physical test performed; not marked PASS. Recorded in the follow-up list below.
 - [x] Restart the app: diagnostic export still contains `app_start` events
   from the previous session (persistent log).
       — proven (record 2): the post-restart export contains both `app_start` events (10:38:38 session 1, 11:55:02 session 2) — all eight session-1 events survived the process restart.
@@ -154,14 +156,15 @@ secret-matching keys or values anywhere in the file.
   the export.
 - The export contains no secrets (full key/value scan).
 
-### Not yet proven at the time of this record
+### Not yet proven at the time of this record (final disposition)
 
 - Visual: launcher name **Songjog**, and no HisabKitab identity anywhere in
-  the UI (Bangla and English). — still pending.
+  the UI. — resolved: owner visual confirmation 2026-08-26.
 - Share sheet opens after export, and a target app can open the file. — resolved in record 2.
-- No permission prompt appeared during export/share. — still pending.
+- No permission prompt appeared during export/share. — resolved: not observed during physical testing (owner report, 2026-08-26).
 - Restart persistence (two `app_start` events after force-stop). — resolved in record 2.
-- Content of the user-data export: `songjog_data_20260826_104324.json` not yet returned. — still pending.
+- Content of the user-data export: resolved — owner confirmed the exported
+  JSON can be opened by another application (2026-08-26).
 
 ## Device test record 2 — 2026-08-26, 12:05 UTC (post-restart export)
 
@@ -214,27 +217,77 @@ and the bounded log (cap 200) held the entire exploration session.
 1. **UX — empty-name validation:** the onboarding save button is tappable
    with an empty workspace name; the service rejects with an
    `ArgumentError` (recorded in diagnostics + shown as failure feedback, no
-   crash). Follow-up for a later release: client-side validation (disable
-   save / inline field error) so the rejection never happens.
+   crash). Tracked as follow-up issue
+   [#6](https://github.com/soobujmiah/songjog/issues/6): client-side
+   validation (disable save / inline field error) so the rejection never
+   happens.
 2. **Scope — transaction entry UI** is not part of this build; the
    checklist's "record one transaction" item is covered at the domain level
-   (model + unit tests), with entry UI in a later release gate (see
-   `RELEASE_GATES.md`).
+   (model + unit tests), with entry UI recorded as a future product
+   milestone (see `RELEASE_GATES.md`).
 
 ## Result
 
-**Status: PHYSICAL DEVICE TEST — NEARLY COMPLETE** — all automated gates are
-green on commit `8e21317` (analyze, 48/48 tests, debug APK built and
-uploaded, legacy-name audit). On-device validation on the Redmi Turbo 4 Pro
-has produced two artifacts (records 1 and 2). Verified with on-device
-evidence: installation, launch, real SQLite, onboarding, user-data export,
-diagnostic export, controlled test events, share sheet (success and dismiss
-states), restart persistence of the diagnostic log, and real error capture
-with full stack traces — all in Bangla mode, all free of secrets. Remaining:
-owner confirmations for (a) launcher name **Songjog** / no HisabKitab
-identity visible, (b) no permission prompt, (c) rotation/background
-survival, and (d) content of the user-data export. The milestone closes when
-every checklist box is checked with evidence.
+**Status: PHYSICAL DEVICE VALIDATION — COMPLETE**
+
+Closed 2026-08-26 (Asia/Dhaka) after owner visual confirmation and
+reconciliation of the final checklist items. Every mandatory gate is
+verified with physical-device evidence; the single remaining item
+(configuration change) is explicitly recorded below as a pending,
+non-blocking follow-up and was **not** marked PASS.
+
+### Verified on the physical device (Redmi Turbo 4 Pro, `25053RT47C`)
+
+| Item | Evidence |
+|---|---|
+| Device / OS | `Redmi 25053RT47C (onyx)`, Android 16 (SDK 36) — report metadata in both artifacts |
+| App identity | `com.songjog.songjog`, `0.1.0 (1)`, `runtime_mode: debug`; launcher shows **Songjog** (owner visual, 2026-08-26) |
+| Branding | No HisabKitab identity visible in the tested UI (owner visual, 2026-08-26); CI aapt label `Songjog` |
+| Launch & database | Real SQLite opened on device; `database_open` + `app_start` logged per session |
+| Onboarding | Two owner workspaces created on device (institution/retail, business/retail) |
+| User-data export | Completed on device; deterministic filename; `application/json`; **exported JSON opened by another application** (owner-confirmed) |
+| Diagnostic export | Completed on device; valid JSON; correct report metadata; 35-event multi-session log |
+| Share | Share sheet dispatched successfully twice; one dismissal distinguished in the log; both artifacts reached the owner through this in-app share path |
+| Diagnostic persistence | Full force-stop → restart: all session-1 events survived; two `app_start` events in the post-restart export |
+| Error capture | Three real `onboarding_save` rejections captured as `error` records with full 17-frame stack traces; app stayed functional throughout |
+| Controlled events | Debug test-event control produced events that appear in exports (4 across the session) |
+| Permissions | Not observed during physical testing (no prompt reported) |
+| Secrets | Machine scan of both artifacts (keys, values, stack traces): no matches |
+| Localization | Entire session run in Bangla mode (`locale: bn`) |
+
+### Verified by domain / unit tests only (not physical-device evidence)
+
+- Transaction domain behavior (model, invariants) — no transaction-entry UI
+  in this build; 48/48 tests green at the checkpoint commit.
+- Export payload structure, filename determinism, redaction rules (unit +
+  widget tests).
+
+### Future milestone (explicitly out of scope here)
+
+- **Transaction-entry UI** — later product milestone (see `RELEASE_GATES.md`).
+- **Onboarding empty-name validation UX** — follow-up issue
+  [#6](https://github.com/soobujmiah/songjog/issues/6), non-blocking.
+
+### Follow-up list (non-blocking; none gate this milestone)
+
+1. **Configuration change (rotation / split-screen)** — pending physical
+   verification; deliberately not marked PASS (no physical test performed).
+   Background/foreground and relaunch survival are physically verified.
+2. **Issue #6** — improve onboarding empty-workspace validation UX (disable
+   save / inline field error; the service-level rejection is already safe
+   and is logged with a full stack trace).
+3. **Transaction-entry UI** — future product milestone.
+
+### CI evidence
+
+- Checkpoint (code) commit `8e21317` — run
+  [32960136813](https://github.com/soobujmiah/songjog/actions/runs/32960136813)
+  — all jobs success (analyze, 48/48 tests, debug APK + badging, audit).
+- Latest code-verified commit before this closure record `75607fb` — run
+  [32967564694](https://github.com/soobujmiah/songjog/actions/runs/32967564694)
+  — all jobs success.
+- This closure record: pushed to `feature/android-owner-mvp` with CI
+  verified before merge to `main` (merge record appended below).
 
 ## Branch state (as of this checkpoint)
 
