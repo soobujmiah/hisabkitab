@@ -7,10 +7,16 @@ import '../settings/settings_screen.dart';
 import '../workspace/workspace_home_page.dart';
 
 class WelcomePage extends StatelessWidget {
-  const WelcomePage({super.key, required this.services, this.locale = AppLocale.bangla});
+  const WelcomePage({
+    super.key,
+    required this.services,
+    this.locale = AppLocale.bangla,
+    this.onLocaleChanged,
+  });
 
   final AppServices services;
   final AppLocale locale;
+  final ValueChanged<AppLocale>? onLocaleChanged;
 
   String t(String key) => AppText.get(locale, key);
 
@@ -29,7 +35,11 @@ class WelcomePage extends StatelessWidget {
       // home is where the owner works from here on.
       Navigator.of(context).pushReplacement(
         MaterialPageRoute<void>(
-          builder: (_) => WorkspaceHomePage(services: services, locale: locale),
+          builder: (_) => WorkspaceHomePage(
+            services: services,
+            locale: locale,
+            onLocaleChanged: onLocaleChanged,
+          ),
         ),
       );
       ScaffoldMessenger.of(context).showSnackBar(
@@ -49,7 +59,11 @@ class WelcomePage extends StatelessWidget {
             tooltip: t('settings'),
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute<void>(
-                builder: (_) => SettingsScreen(services: services, locale: locale),
+                builder: (_) => SettingsScreen(
+                  services: services,
+                  locale: locale,
+                  onLocaleChanged: onLocaleChanged,
+                ),
               ),
             ),
           ),

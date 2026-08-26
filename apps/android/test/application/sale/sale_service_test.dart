@@ -106,6 +106,41 @@ void main() {
     });
   });
 
+  group('calculateReturnable', () {
+    test('returns 0 when paid <= total', () {
+      expect(calculateReturnable(0, 10000), 0);
+      expect(calculateReturnable(5000, 10000), 0);
+      expect(calculateReturnable(10000, 10000), 0);
+    });
+
+    test('returns excess when paid > total', () {
+      expect(calculateReturnable(15000, 10000), 5000);
+      expect(calculateReturnable(90000, 85000), 5000);
+      expect(calculateReturnable(100000, 85000), 15000);
+    });
+
+    test('never returns negative', () {
+      expect(calculateReturnable(-100, 10000), 0);
+      expect(calculateReturnable(0, 0), 0);
+    });
+  });
+
+  group('toBanglaDigits', () {
+    test('converts Latin digits to Bangla', () {
+      expect(toBanglaDigits('0'), '০');
+      expect(toBanglaDigits('1'), '১');
+      expect(toBanglaDigits('850'), '৮৫০');
+      expect(toBanglaDigits('3.50'), '৩.৫০');
+      expect(toBanglaDigits('0.05'), '০.০৫');
+    });
+
+    test('keeps non-digit characters unchanged except digits', () {
+      expect(toBanglaDigits('BDT 850'), 'BDT ৮৫০');
+      expect(toBanglaDigits('৳850'), '৳৮৫০');
+      expect(toBanglaDigits('-2.50'), '-২.৫০');
+    });
+  });
+
   group('SaleEntryService.saveSale', () {
     late InMemoryStore store;
     late DiagnosticCollector collector;

@@ -73,16 +73,57 @@ class _SaleEntryScreenState extends State<SaleEntryScreen> {
   String t(String key) => AppText.get(widget.locale, key);
 
   /// Currency prefix keeps script purity: Bangla mode uses the taka sign,
-  /// English mode stays Latin-only.
-  String money(int minor) => widget.locale == AppLocale.bangla
-      ? '৳${minorToTaka(minor)}'
-      : 'BDT ${minorToTaka(minor)}';
+  /// English mode stays Latin-only. In Bangla mode, digits use Bangla numerals.
+  String money(int minor) {
+    final taka = minorToTaka(minor);
+    final display = widget.locale == AppLocale.bangla ? toBanglaDigits(taka) : taka;
+    return widget.locale == AppLocale.bangla ? '৳$display' : 'BDT $display';
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _attachLineListeners(_lines.first);
+    _paid.addListener(_onFieldChanged);
+  }
+
+  void _attachLineListeners(_LineState line) {
+    line.description.addListener(_onFieldChanged);
+    line.quantity.addListener(_onFieldChanged);
+    line.price.addListener(_onFieldChanged);
+  }
+
+  void _detachLineListeners(_LineState line) {
+    line.description.removeListener(_onFieldChanged);
+    line.quantity.removeListener(_onFieldChanged);
+    line.price.removeListener(_onFieldChanged);
+  }
+
+  void _onFieldChanged() {
+    if (mounted) setState(() {});
+  }
+
+  void _addLine() {
+    final newLine = _LineState();
+    _attachLineListeners(newLine);
+    setState(() => _lines.add(newLine));
+  }
+
+  void _removeLine(int index) {
+    if (_lines.length == 1) return;
+    final removed = _lines.removeAt(index);
+    _detachLineListeners(removed);
+    removed.dispose();
+    setState(() {});
+  }
 
   @override
   void dispose() {
     for (final line in _lines) {
+      _detachLineListeners(line);
       line.dispose();
     }
+    _paid.removeListener(_onFieldChanged);
     _paid.dispose();
     super.dispose();
   }
@@ -151,6 +192,7 @@ class _SaleEntryScreenState extends State<SaleEntryScreen> {
     final paid = _paidMinor ?? 0;
     final clampedPaid = clampPaid(paid, total);
     final due = total - clampedPaid;
+    final returnable = calculateReturnable(paid, total);
     return Scaffold(
       appBar: AppBar(title: Text(t('sale_title'))),
       body: SafeArea(
@@ -162,7 +204,7 @@ class _SaleEntryScreenState extends State<SaleEntryScreen> {
               const SizedBox(height: 12),
             ],
             FilledButton.tonalIcon(
-              onPressed: _saving ? null : () => setState(() => _lines.add(_LineState())),
+              onPressed: _saving ? null : _addLine,
               icon: const Icon(Icons.add),
               label: Text(t('add_line')),
             ),
@@ -210,6 +252,30 @@ class _SaleEntryScreenState extends State<SaleEntryScreen> {
                         ),
                       ],
                     ),
+                    if (returnable > 0) ...[
+                      const SizedBox(height: 12),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(t('returnable'),
+                              style: Theme.of(context).textTheme.titleMedium),
+                          Text(
+                            money(returnable),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        t('change_due'),
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ],
                     const SizedBox(height: 8),
                     Text(
                       t(_status.name == 'paid'
@@ -276,12 +342,8 @@ class _SaleEntryScreenState extends State<SaleEntryScreen> {
                 IconButton(
                   tooltip: t('remove_line'),
                   icon: const Icon(Icons.delete_outline),
-                  onPressed: _saving || _lines.length == 1
-                      ? null
-                      : () => setState(() {
-                          final removed = _lines.removeAt(index);
-                          removed.dispose();
-                        }),
+                  onPressed:
+                      _saving || _lines.length == 1 ? null : () => _removeLine(index),
                 ),
               ],
             ),

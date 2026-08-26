@@ -59,11 +59,18 @@ class SongjogApp extends StatefulWidget {
 class _SongjogAppState extends State<SongjogApp> {
   late final Future<BusinessProfile?> _profile =
       widget.services.repository.getProfile();
+  late AppLocale _locale = widget.locale;
+
+  void _setLocale(AppLocale locale) {
+    if (_locale != locale) {
+      setState(() => _locale = locale);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: AppText.get(widget.locale, 'app_name'),
+      title: AppText.get(_locale, 'app_name'),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
@@ -81,8 +88,16 @@ class _SongjogAppState extends State<SongjogApp> {
             );
           }
           return snapshot.data == null
-              ? WelcomePage(services: widget.services, locale: widget.locale)
-              : WorkspaceHomePage(services: widget.services, locale: widget.locale);
+              ? WelcomePage(
+                  services: widget.services,
+                  locale: _locale,
+                  onLocaleChanged: _setLocale,
+                )
+              : WorkspaceHomePage(
+                  services: widget.services,
+                  locale: _locale,
+                  onLocaleChanged: _setLocale,
+                );
         },
       ),
     );

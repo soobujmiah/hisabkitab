@@ -14,10 +14,12 @@ class WorkspaceHomePage extends StatefulWidget {
     super.key,
     required this.services,
     this.locale = AppLocale.bangla,
+    this.onLocaleChanged,
   });
 
   final AppServices services;
   final AppLocale locale;
+  final ValueChanged<AppLocale>? onLocaleChanged;
 
   @override
   State<WorkspaceHomePage> createState() => _WorkspaceHomePageState();
@@ -30,9 +32,12 @@ class _WorkspaceHomePageState extends State<WorkspaceHomePage> {
 
   String t(String key) => AppText.get(widget.locale, key);
 
-  String money(int minor) => widget.locale == AppLocale.bangla
-      ? '৳${minorToTaka(minor)}'
-      : 'BDT ${minorToTaka(minor)}';
+  String money(int minor) {
+    final taka = minorToTaka(minor);
+    final display =
+        widget.locale == AppLocale.bangla ? toBanglaDigits(taka) : taka;
+    return widget.locale == AppLocale.bangla ? '৳$display' : 'BDT $display';
+  }
 
   @override
   void initState() {
@@ -82,8 +87,11 @@ class _WorkspaceHomePageState extends State<WorkspaceHomePage> {
             tooltip: t('settings'),
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute<void>(
-                builder: (_) =>
-                    SettingsScreen(services: widget.services, locale: widget.locale),
+                builder: (_) => SettingsScreen(
+                  services: widget.services,
+                  locale: widget.locale,
+                  onLocaleChanged: widget.onLocaleChanged,
+                ),
               ),
             ),
           ),

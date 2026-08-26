@@ -74,6 +74,11 @@ class AppText {
       'complete_sale': 'বিক্রি সম্পন্ন করুন',
       'sale_saved': 'বিক্রি সংরক্ষিত হয়েছে',
       'sale_failed': 'বিক্রি সংরক্ষণ ব্যর্থ হয়েছে',
+      'returnable': 'ফেরত',
+      'change_due': 'ফেরত দিতে হবে',
+      'language': 'ভাষা',
+      'language_bangla': 'বাংলা',
+      'language_english': 'ইংরেজি',
     },
     AppLocale.english: {
       'app_name': 'Songjog',
@@ -138,6 +143,11 @@ class AppText {
       'complete_sale': 'Complete sale',
       'sale_saved': 'Sale saved',
       'sale_failed': 'Failed to save sale',
+      'returnable': 'Change',
+      'change_due': 'Change due',
+      'language': 'Language',
+      'language_bangla': 'Bangla',
+      'language_english': 'English',
     },
   };
 

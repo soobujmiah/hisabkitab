@@ -36,6 +36,23 @@ String minorToTaka(int minor) {
   return negative ? '-$text' : text;
 }
 
+/// Converts Latin digits 0-9 in [input] to Bangla digits ০-৯.
+/// Keeps non-digit characters (dot, minus) unchanged.
+String toBanglaDigits(String input) {
+  const latin = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  const bangla = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+  var result = input;
+  for (var i = 0; i < 10; i++) {
+    result = result.replaceAll(latin[i], bangla[i]);
+  }
+  return result;
+}
+
+/// Calculates returnable/change money when entered paid exceeds total.
+/// Returns 0 when paid <= total. Exact int math, never negative.
+int calculateReturnable(int enteredPaidMinor, int totalMinor) =>
+    enteredPaidMinor > totalMinor ? enteredPaidMinor - totalMinor : 0;
+
 /// Payment status derived from total and received amount.
 PaymentStatus derivePaymentStatus({
   required int totalMinor,

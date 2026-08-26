@@ -7,16 +7,19 @@ import '../../domain/services/export_type.dart';
 import '../../l10n/app_text.dart';
 
 /// Settings & tools surface. Hosts the mandatory user-facing export entry
-/// points (user data and diagnostics) plus debug-only diagnostics controls.
+/// points (user data and diagnostics) plus debug-only diagnostics controls
+/// and language toggle.
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({
     super.key,
     required this.services,
     this.locale = AppLocale.bangla,
+    this.onLocaleChanged,
   });
 
   final AppServices services;
   final AppLocale locale;
+  final ValueChanged<AppLocale>? onLocaleChanged;
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -114,6 +117,42 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
         children: [
+          Text(
+            t('language'),
+            style: Theme.of(context).textTheme.labelLarge,
+          ),
+          const SizedBox(height: 8),
+          Card(
+            child: Column(
+              children: [
+                RadioListTile<AppLocale>(
+                  title: Text(t('language_bangla')),
+                  value: AppLocale.bangla,
+                  groupValue: widget.locale,
+                  onChanged: (value) {
+                    if (value != null) {
+                      widget.onLocaleChanged?.call(value);
+                      // Close settings and reopen with new locale via parent rebuild
+                      Navigator.of(context).pop();
+                    }
+                  },
+                ),
+                const Divider(height: 1),
+                RadioListTile<AppLocale>(
+                  title: Text(t('language_english')),
+                  value: AppLocale.english,
+                  groupValue: widget.locale,
+                  onChanged: (value) {
+                    if (value != null) {
+                      widget.onLocaleChanged?.call(value);
+                      Navigator.of(context).pop();
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
           Text(
             t('export_section'),
             style: Theme.of(context).textTheme.labelLarge,
