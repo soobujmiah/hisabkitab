@@ -7,6 +7,7 @@ import '../../domain/models/transaction.dart';
 import '../../l10n/app_text.dart';
 import '../sale/sale_entry_screen.dart';
 import '../settings/settings_screen.dart';
+import '../transaction/transaction_details_page.dart';
 
 /// Owner workspace home: recent transactions plus the fast sale entry.
 class WorkspaceHomePage extends StatefulWidget {
@@ -143,48 +144,60 @@ class _WorkspaceHomePageState extends State<WorkspaceHomePage> {
         const SizedBox(height: 12),
         for (final transaction in _transactions)
           Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    transaction.lines.first.description,
-                    style: Theme.of(context).textTheme.titleSmall,
+            clipBehavior: Clip.antiAlias,
+            child: InkWell(
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => TransactionDetailsPage(
+                    transaction: transaction,
+                    locale: widget.locale,
                   ),
-                  if (transaction.lines.length > 1)
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                     Text(
-                      t('more_lines').replaceFirst(
-                          '{count}', '${transaction.lines.length - 1}'),
-                      style: Theme.of(context).textTheme.bodySmall,
+                      transaction.lines.first.description,
+                      style: Theme.of(context).textTheme.titleSmall,
                     ),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(money(transaction.totalMinor),
-                          style: Theme.of(context).textTheme.titleSmall),
+                    if (transaction.lines.length > 1)
                       Text(
-                        t(transaction.paymentStatus.name == 'paid'
-                            ? 'paid_status'
-                            : transaction.paymentStatus.name == 'partial'
-                                ? 'partial_status'
-                                : 'unpaid_status'),
-                        style: Theme.of(context).textTheme.labelLarge,
+                        t('more_lines').replaceFirst(
+                            '{count}', '${transaction.lines.length - 1}'),
+                        style: Theme.of(context).textTheme.bodySmall,
                       ),
-                    ],
-                  ),
-                  if (transaction.dueMinor > 0)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 4),
-                      child: Text(
-                        '${t('due')}: ${money(transaction.dueMinor)}',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Theme.of(context).colorScheme.error,
-                            ),
-                      ),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(money(transaction.totalMinor),
+                            style: Theme.of(context).textTheme.titleSmall),
+                        Text(
+                          t(transaction.paymentStatus.name == 'paid'
+                              ? 'paid_status'
+                              : transaction.paymentStatus.name == 'partial'
+                                  ? 'partial_status'
+                                  : 'unpaid_status'),
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
+                      ],
                     ),
-                ],
+                    if (transaction.dueMinor > 0)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: Text(
+                          '${t('due')}: ${money(transaction.dueMinor)}',
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: Theme.of(context).colorScheme.error,
+                                  ),
+                        ),
+                      ),
+                  ],
+                ),
               ),
             ),
           ),
