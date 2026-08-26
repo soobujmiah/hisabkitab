@@ -48,7 +48,8 @@ class AppText {
       // Workspace home & fast sale entry
       'workspace_home_recent': 'সাম্প্রতিক লেনদেন',
       'no_transactions': 'এখনো কোনো লেনদেন নেই',
-      'no_transactions_hint': 'প্রথম বিক্রিটি নতুন বিক্রি বোতাম দিয়ে নথিভুক্ত করুন',
+      'no_transactions_hint':
+          'প্রথম বিক্রিটি নতুন বিক্রি বোতাম দিয়ে নথিভুক্ত করুন',
       'new_sale': 'নতুন বিক্রি',
       'sale_title': 'নতুন বিক্রি',
       'line_description': 'বর্ণনা',
@@ -101,6 +102,7 @@ class AppText {
       'continue': 'Continue',
       'skip': 'Not now',
       'save': 'Save',
+      'onboarding_saved': 'Onboarding saved',
       // Export & diagnostics
       'export_section': 'Export',
       'export_my_data': 'Export my data',

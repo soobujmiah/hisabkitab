@@ -6,18 +6,13 @@ void main() {
   group('AppText script purity', () {
     test('Bangla mode contains no Latin letters in UI copy', () {
       final banglaValues = AppText.values[AppLocale.bangla]!;
-      // Allowed Latin exceptions: none for app-authored UI text, except maybe technical?
-      // We check that values do not contain [A-Za-z] unless they are in allowlist.
-      // For this test, we enforce no Latin letters at all in Bangla UI copy.
       final latinRegex = RegExp(r'[A-Za-z]');
+      final placeholderRegex = RegExp(r'\{[^}]+\}');
       for (final entry in banglaValues.entries) {
-        // Skip keys that are allowed to have Latin? Currently none.
-        // Money formatting is handled separately, not via AppText.
-        if (latinRegex.hasMatch(entry.value)) {
-          // Allowlist: check if value contains only allowed Latin like BDT? But BDT should not be in bn.
-          // For now, fail if any Latin found in bn.
+        final cleaned = entry.value.replaceAll(placeholderRegex, '');
+        if (latinRegex.hasMatch(cleaned)) {
           fail(
-            'Bangla key "${entry.key}" contains Latin letters: "${entry.value}"',
+            'Bangla key "${entry.key}" contains Latin letters: "${entry.value}" (cleaned: "$cleaned")',
           );
         }
       }
@@ -97,11 +92,8 @@ void main() {
     });
 
     test('calculateReturnable works for normal, exact, overpayment', () {
-      // Normal: paid < total -> returnable 0
       expect(calculateReturnable(30000, 85000), 0);
-      // Exact: paid == total -> 0
       expect(calculateReturnable(85000, 85000), 0);
-      // Overpayment: paid > total -> excess
       expect(calculateReturnable(90000, 85000), 5000);
       expect(calculateReturnable(100000, 85000), 15000);
     });

@@ -26,8 +26,7 @@ void main() {
     skipOffstage: false,
   );
 
-  Finder returnableFinder() =>
-      find.widgetWithText(Text, t('returnable'), skipOffstage: false);
+  Finder returnableFinder() => find.text(t('returnable'), skipOffstage: false);
 
   Future<void> tapCompleteSale(WidgetTester tester) async {
     final button = completeSaleButton();
@@ -49,6 +48,15 @@ void main() {
     await tester.pumpAndSettle();
   }
 
+  Future<void> enterField(
+    WidgetTester tester,
+    Finder field,
+    String text,
+  ) async {
+    await tester.enterText(field, text);
+    await tester.pumpAndSettle();
+  }
+
   setUp(() {
     store = InMemoryStore();
     collector = DiagnosticCollector();
@@ -62,12 +70,10 @@ void main() {
     await ensureCompleteSaleVisible(tester);
     expect(tester.widget<FilledButton>(completeSaleButton()).onPressed, isNull);
 
-    await tester.enterText(findField('line_description'), 'Mouse');
-    await tester.pumpAndSettle();
+    await enterField(tester, findField('line_description'), 'Mouse');
     expect(tester.widget<FilledButton>(completeSaleButton()).onPressed, isNull);
 
-    await tester.enterText(findField('price'), '850');
-    await tester.pumpAndSettle();
+    await enterField(tester, findField('price'), '850');
     expect(
       tester.widget<FilledButton>(completeSaleButton()).onPressed,
       isNotNull,
@@ -78,10 +84,9 @@ void main() {
     tester,
   ) async {
     await pumpScreen(tester);
-    await tester.enterText(findField('line_description'), 'Mouse');
-    await tester.enterText(findField('price'), '850');
-    await tester.enterText(findField('amount_paid'), '850');
-    await tester.pumpAndSettle();
+    await enterField(tester, findField('line_description'), 'Mouse');
+    await enterField(tester, findField('price'), '850');
+    await enterField(tester, findField('amount_paid'), '850');
 
     await tapCompleteSale(tester);
     await tester.pumpAndSettle();
@@ -96,10 +101,9 @@ void main() {
 
   testWidgets('a partial payment leaves the due amount', (tester) async {
     await pumpScreen(tester);
-    await tester.enterText(findField('line_description'), 'Mouse');
-    await tester.enterText(findField('price'), '850');
-    await tester.enterText(findField('amount_paid'), '300');
-    await tester.pumpAndSettle();
+    await enterField(tester, findField('line_description'), 'Mouse');
+    await enterField(tester, findField('price'), '850');
+    await enterField(tester, findField('amount_paid'), '300');
 
     await tapCompleteSale(tester);
     await tester.pumpAndSettle();
@@ -112,17 +116,19 @@ void main() {
 
   testWidgets('multi-line totals are summed on save', (tester) async {
     await pumpScreen(tester);
-    await tester.enterText(findField('line_description'), 'Mouse');
-    await tester.enterText(findField('price'), '100');
-    await tester.pumpAndSettle();
+    await enterField(tester, findField('line_description'), 'Mouse');
+    await enterField(tester, findField('price'), '100');
 
     await tester.tap(
       find.widgetWithText(FilledButton, t('add_line'), skipOffstage: false),
     );
     await tester.pumpAndSettle();
-    await tester.enterText(findField('line_description').last, 'Windows setup');
-    await tester.enterText(findField('price').last, '50');
-    await tester.pumpAndSettle();
+    await enterField(
+      tester,
+      findField('line_description').last,
+      'Windows setup',
+    );
+    await enterField(tester, findField('price').last, '50');
 
     await tapCompleteSale(tester);
     await tester.pumpAndSettle();
@@ -135,10 +141,9 @@ void main() {
 
   testWidgets('overpayment is clamped to the total', (tester) async {
     await pumpScreen(tester);
-    await tester.enterText(findField('line_description'), 'Mouse');
-    await tester.enterText(findField('price'), '850');
-    await tester.enterText(findField('amount_paid'), '900');
-    await tester.pumpAndSettle();
+    await enterField(tester, findField('line_description'), 'Mouse');
+    await enterField(tester, findField('price'), '850');
+    await enterField(tester, findField('amount_paid'), '900');
 
     await tapCompleteSale(tester);
     await tester.pumpAndSettle();
@@ -150,27 +155,23 @@ void main() {
 
   testWidgets('overpayment shows returnable change', (tester) async {
     await pumpScreen(tester);
-    await tester.enterText(findField('line_description'), 'Mouse');
-    await tester.enterText(findField('price'), '850');
-    await tester.pumpAndSettle();
-    // Paid 900 for total 850 -> returnable 50
-    await tester.enterText(findField('amount_paid'), '900');
-    await tester.pumpAndSettle();
+    await enterField(tester, findField('line_description'), 'Mouse');
+    await enterField(tester, findField('price'), '850');
+    await enterField(tester, findField('amount_paid'), '900');
 
     // Returnable should be visible
     expect(returnableFinder(), findsOneWidget);
-    // Money should show ৳৫০ in Bangla mode (Bangla numerals)
+    // Money should show ৳৫০ in Bangla mode (Bangla numerals) — returnable 50
     expect(find.textContaining('৫০', skipOffstage: false), findsWidgets);
-    // Due should be 0
+    // Due should be 0 -> ৳০
     expect(find.textContaining('৳০', skipOffstage: false), findsWidgets);
   });
 
   testWidgets('exact payment shows no returnable', (tester) async {
     await pumpScreen(tester);
-    await tester.enterText(findField('line_description'), 'Mouse');
-    await tester.enterText(findField('price'), '850');
-    await tester.enterText(findField('amount_paid'), '850');
-    await tester.pumpAndSettle();
+    await enterField(tester, findField('line_description'), 'Mouse');
+    await enterField(tester, findField('price'), '850');
+    await enterField(tester, findField('amount_paid'), '850');
 
     expect(returnableFinder(), findsNothing);
   });
@@ -179,10 +180,9 @@ void main() {
     tester,
   ) async {
     await pumpScreen(tester);
-    await tester.enterText(findField('line_description'), 'Mouse');
-    await tester.enterText(findField('price'), '850');
-    await tester.enterText(findField('amount_paid'), '300');
-    await tester.pumpAndSettle();
+    await enterField(tester, findField('line_description'), 'Mouse');
+    await enterField(tester, findField('price'), '850');
+    await enterField(tester, findField('amount_paid'), '300');
 
     expect(returnableFinder(), findsNothing);
     expect(find.textContaining('বাকি', skipOffstage: false), findsOneWidget);
@@ -190,23 +190,22 @@ void main() {
 
   testWidgets('Bangla numerals used for money in Bangla mode', (tester) async {
     await pumpScreen(tester);
-    await tester.enterText(findField('line_description'), 'Mouse');
-    await tester.enterText(findField('price'), '850');
-    await tester.pumpAndSettle();
+    await enterField(tester, findField('line_description'), 'Mouse');
+    await enterField(tester, findField('price'), '850');
 
-    // Total should show Bangla digits ৮৫০ with ৳
+    // Total should show Bangla digits ৮৫০ with ৳ — appears in multiple places (line total + total)
     expect(find.textContaining('৳', skipOffstage: false), findsWidgets);
-    expect(find.textContaining('৮৫০', skipOffstage: false), findsOneWidget);
+    expect(find.textContaining('৮৫০', skipOffstage: false), findsWidgets);
     // Should not contain Latin 850 in Bangla mode for total
     expect(find.text('৳850', skipOffstage: false), findsNothing);
+    expect(find.text('BDT 850', skipOffstage: false), findsNothing);
   });
 
   testWidgets('payment method selection is stored', (tester) async {
     await pumpScreen(tester);
-    await tester.enterText(findField('line_description'), 'Mouse');
-    await tester.enterText(findField('price'), '850');
-    await tester.enterText(findField('amount_paid'), '850');
-    await tester.pumpAndSettle();
+    await enterField(tester, findField('line_description'), 'Mouse');
+    await enterField(tester, findField('price'), '850');
+    await enterField(tester, findField('amount_paid'), '850');
 
     await tester.tap(
       find.widgetWithText(

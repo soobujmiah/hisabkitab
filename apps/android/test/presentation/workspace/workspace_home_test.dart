@@ -142,9 +142,9 @@ void main() {
       find.text(t('more_lines').replaceFirst('{count}', '1')),
       findsOneWidget,
     );
-    // Total ৳1400, due ৳1100.
-    expect(find.text('৳1400'), findsOneWidget);
-    expect(find.text('${t('due')}: ৳1100'), findsOneWidget);
+    // Total ৳১৪০০, due ৳১১০০ in Bangla mode (Bangla numerals).
+    expect(find.text('৳১৪০০'), findsOneWidget);
+    expect(find.text('${t('due')}: ৳১১০০'), findsOneWidget);
     expect(find.text(t('partial_status')), findsOneWidget);
   });
 
