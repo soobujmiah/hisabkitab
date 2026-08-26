@@ -1,35 +1,31 @@
 # HisabKitab
 
-HisabKitab is an Android-first, Bangla-friendly business management app for shops, micro-businesses, and growing small businesses.
+HisabKitab is an Android-first, Bengali-first business and institution operations app for shops, service businesses, and later education/training institutions.
 
-## Product direction
+## Product promise
 
-HisabKitab is designed to make everyday business operations simple enough for a non-technical shop owner while providing a professional foundation for sales, purchases, inventory, customer/supplier dues, expenses, cash/bank movement, invoices, reports, staff access, and business insights.
+**দৈনন্দিন হিসাব এক জায়গায়।**
 
-The product is intentionally broader than a digital khata: it should become a lightweight business operating system for Bangladesh-first small businesses, with a clean premium mobile experience.
+The Owner Edition prioritizes extremely fast daily entry, reliable financial records, polished customer documents, private cost/margin data, and adaptive workflows by business type.
 
-## Current status
+## Current product boundary
 
-Repository bootstrap and product/architecture foundation are being established. Implementation must follow the documented product specification, UX principles, architecture, and engineering gates.
+The first commercial release is Owner Edition. Staff/team, public storefront, advanced integrations, and institution-specific workflows are architecturally prepared but must not delay the first owner release.
 
-## Repository principles
+## Non-negotiables
 
-- Repository truth is authoritative.
-- Do not invent implementation status, test results, releases, or commit SHAs.
-- Prefer small, reviewable PRs and explicit acceptance criteria.
-- Product documentation is maintained alongside the implementation.
-- Bangladesh-first defaults are supported without hard-coding the product to one business type.
+- Bengali-first and English-first are mutually pure UI modes.
+- User-entered business data is not treated as UI translation content.
+- Mandatory fields are minimal.
+- Posted financial records are corrected through auditable adjustments/returns/refunds rather than destructive deletion.
+- Actual cost and margin are private and never appear on customer-facing documents.
+- Trial/licensing is server-authoritative; public source code contains no production secrets.
+- Offline operation must remain useful within the configured entitlement policy.
 
-## Planned platform
+## Development truth
 
-- Android-first
-- Bangla and English UI
-- Offline-first local data with reliable synchronization architecture
-- Premium Material-based UI with restrained motion
-- Business-type-aware onboarding and dashboard configuration
-- Modular domain architecture
-- Strong privacy and account/data protection
+The repository is public. Documentation may describe intended architecture, but implementation and test status must only be reported when actually present and verified.
 
 ## Documentation
 
-See `docs/` for the product specification, UX system, architecture, business-type model, data model, security, roadmap, research notes, and release gates.
+See `docs/` for the Owner Edition UX, trial/licensing, public-repository activation, architecture, business-type model, data model, security, roadmap, research notes, and release gates.
