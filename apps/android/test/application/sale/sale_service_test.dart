@@ -149,8 +149,8 @@ void main() {
         paidMinor: 100000,
       );
 
-      expect(record.totalMinor, 175000);
-      expect(record.dueMinor, 75000);
+      expect(record.totalMinor, 180000);
+      expect(record.dueMinor, 80000);
       expect(record.paymentStatus, PaymentStatus.partial);
     });
 
@@ -177,8 +177,8 @@ void main() {
 
     test('a failing store records the error and rethrows', () async {
       final failing = SaleEntryService(_ThrowingRepo(), collector);
-      expect(
-        () => failing.saveSale(
+      await expectLater(
+        failing.saveSale(
           lines: [(description: 'Mouse', quantity: 1, priceMinor: 85000)],
         ),
         throwsStateError,

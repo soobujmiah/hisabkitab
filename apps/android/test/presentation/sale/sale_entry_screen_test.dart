@@ -17,10 +17,27 @@ void main() {
   late DiagnosticCollector collector;
   late SaleEntryService service;
 
-  Finder findField(String label) => find.widgetWithText(TextField, t(label));
+  Finder findField(String label) =>
+      find.widgetWithText(TextField, t(label), skipOffstage: false);
 
-  Finder completeSaleButton() =>
-      find.widgetWithText(FilledButton, t('complete_sale'));
+  Finder completeSaleButton() => find.widgetWithText(
+    FilledButton,
+    t('complete_sale'),
+    skipOffstage: false,
+  );
+
+  Future<void> tapCompleteSale(WidgetTester tester) async {
+    final button = completeSaleButton();
+    await tester.ensureVisible(button);
+    await tester.pumpAndSettle();
+    await tester.tap(button);
+  }
+
+  Future<void> ensureCompleteSaleVisible(WidgetTester tester) async {
+    final button = completeSaleButton();
+    await tester.ensureVisible(button);
+    await tester.pumpAndSettle();
+  }
 
   Future<void> pumpScreen(WidgetTester tester) async {
     await tester.pumpWidget(
@@ -39,6 +56,7 @@ void main() {
     tester,
   ) async {
     await pumpScreen(tester);
+    await ensureCompleteSaleVisible(tester);
     expect(tester.widget<FilledButton>(completeSaleButton()).onPressed, isNull);
 
     await tester.enterText(findField('line_description'), 'Mouse');
@@ -62,7 +80,7 @@ void main() {
     await tester.enterText(findField('amount_paid'), '850');
     await tester.pump();
 
-    await tester.tap(completeSaleButton());
+    await tapCompleteSale(tester);
     await tester.pumpAndSettle();
 
     final transactions = await store.loadTransactions();
@@ -80,7 +98,7 @@ void main() {
     await tester.enterText(findField('amount_paid'), '300');
     await tester.pump();
 
-    await tester.tap(completeSaleButton());
+    await tapCompleteSale(tester);
     await tester.pumpAndSettle();
 
     final transaction = (await store.loadTransactions()).single;
@@ -94,13 +112,15 @@ void main() {
     await tester.enterText(findField('line_description'), 'Mouse');
     await tester.enterText(findField('price'), '100');
 
-    await tester.tap(find.widgetWithText(FilledButton, t('add_line')));
+    await tester.tap(
+      find.widgetWithText(FilledButton, t('add_line'), skipOffstage: false),
+    );
     await tester.pump();
     await tester.enterText(findField('line_description').last, 'Windows setup');
     await tester.enterText(findField('price').last, '50');
     await tester.pump();
 
-    await tester.tap(completeSaleButton());
+    await tapCompleteSale(tester);
     await tester.pumpAndSettle();
 
     final transaction = (await store.loadTransactions()).single;
@@ -116,7 +136,7 @@ void main() {
     await tester.enterText(findField('amount_paid'), '900');
     await tester.pump();
 
-    await tester.tap(completeSaleButton());
+    await tapCompleteSale(tester);
     await tester.pumpAndSettle();
 
     final transaction = (await store.loadTransactions()).single;
@@ -135,13 +155,14 @@ void main() {
       find.widgetWithText(
         DropdownButtonFormField<PaymentMethod?>,
         t('payment_method_unset'),
+        skipOffstage: false,
       ),
     );
     await tester.pumpAndSettle();
-    await tester.tap(find.text(t('cash')));
+    await tester.tap(find.text(t('cash'), skipOffstage: false));
     await tester.pumpAndSettle();
 
-    await tester.tap(completeSaleButton());
+    await tapCompleteSale(tester);
     await tester.pumpAndSettle();
 
     final transaction = (await store.loadTransactions()).single;
