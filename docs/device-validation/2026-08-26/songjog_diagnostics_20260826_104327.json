@@ -1,0 +1,88 @@
+{
+  "kind": "diagnostic",
+  "filename": "songjog_diagnostics_20260826_104327.json",
+  "report": {
+    "schema_version": 1,
+    "app_version": "0.1.0",
+    "build_number": "1",
+    "platform": "android",
+    "device_model": "Redmi 25053RT47C (onyx)",
+    "os_version": "16 (SDK 36)",
+    "locale": "bn",
+    "runtime_mode": "debug",
+    "events": [
+      {
+        "timestamp": "2026-08-26T10:38:38.472704Z",
+        "level": "info",
+        "message": "SQLite database opened",
+        "category": "database",
+        "operation": "database_open"
+      },
+      {
+        "timestamp": "2026-08-26T10:38:38.474140Z",
+        "level": "info",
+        "message": "application started",
+        "category": "lifecycle",
+        "operation": "app_start"
+      },
+      {
+        "timestamp": "2026-08-26T10:38:38.487191Z",
+        "level": "info",
+        "message": "package info captured",
+        "category": "lifecycle",
+        "operation": "package_info",
+        "details": {
+          "version": "0.1.0",
+          "build_number": "1"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T10:42:28.815080Z",
+        "level": "info",
+        "message": "owner workspace created",
+        "category": "onboarding",
+        "operation": "onboarding_save",
+        "details": {
+          "workspace_kind": "institution",
+          "business_type": "retail"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T10:42:42.047322Z",
+        "level": "warning",
+        "message": "controlled test diagnostic event (requested from settings)",
+        "category": "other",
+        "operation": "test_event"
+      },
+      {
+        "timestamp": "2026-08-26T10:42:44.292124Z",
+        "level": "warning",
+        "message": "controlled test diagnostic event (requested from settings)",
+        "category": "other",
+        "operation": "test_event"
+      },
+      {
+        "timestamp": "2026-08-26T10:43:25.075343Z",
+        "level": "info",
+        "message": "export saved",
+        "category": "export",
+        "operation": "export_userData",
+        "details": {
+          "file": "songjog_data_20260826_104324.json",
+          "mime_type": "application/json"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T10:43:26.609107Z",
+        "level": "info",
+        "message": "export saved",
+        "category": "export",
+        "operation": "export_diagnostic",
+        "details": {
+          "file": "songjog_diagnostics_20260826_104326.json",
+          "mime_type": "application/json"
+        }
+      }
+    ]
+  }
+}
