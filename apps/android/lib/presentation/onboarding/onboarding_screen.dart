@@ -130,9 +130,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               const SizedBox(height: 16),
             ],
             const SizedBox(height: 12),
-            FilledButton(
-              onPressed: _saving ? null : _save,
-              child: Text(_saving ? '…' : t('continue')),
+            ValueListenableBuilder<TextEditingValue>(
+              valueListenable: _name,
+              builder: (context, value, _) => FilledButton(
+                onPressed:
+                    _saving || value.text.trim().isEmpty ? null : _save,
+                child: Text(_saving ? '…' : t('continue')),
+              ),
             ),
           ],
         ),
