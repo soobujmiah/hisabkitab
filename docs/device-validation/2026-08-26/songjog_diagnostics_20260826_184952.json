@@ -1,0 +1,250 @@
+{
+  "kind": "diagnostic",
+  "filename": "songjog_diagnostics_20260826_184952.json",
+  "report": {
+    "schema_version": 1,
+    "app_version": "0.1.0",
+    "build_number": "1",
+    "platform": "android",
+    "device_model": "Redmi 25053RT47C (onyx)",
+    "os_version": "16 (SDK 36)",
+    "locale": "bn",
+    "runtime_mode": "debug",
+    "events": [
+      {
+        "timestamp": "2026-08-26T18:35:50.070Z",
+        "level": "info",
+        "message": "SQLite database opened",
+        "category": "database",
+        "operation": "database_open"
+      },
+      {
+        "timestamp": "2026-08-26T18:35:50.073017Z",
+        "level": "info",
+        "message": "application started",
+        "category": "lifecycle",
+        "operation": "app_start"
+      },
+      {
+        "timestamp": "2026-08-26T18:35:50.104858Z",
+        "level": "info",
+        "message": "package info captured",
+        "category": "lifecycle",
+        "operation": "package_info",
+        "details": {
+          "version": "0.1.0",
+          "build_number": "1"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T18:36:55.729950Z",
+        "level": "info",
+        "message": "owner workspace created",
+        "category": "onboarding",
+        "operation": "onboarding_save",
+        "details": {
+          "workspace_kind": "business",
+          "business_type": "computerMobileService"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T18:37:57.262382Z",
+        "level": "info",
+        "message": "sale saved",
+        "category": "transaction",
+        "operation": "transaction_save",
+        "details": {
+          "lines": 1,
+          "total_minor": 250000,
+          "paid_minor": 250000,
+          "payment_status": "paid"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T18:38:26.997407Z",
+        "level": "info",
+        "message": "sale saved",
+        "category": "transaction",
+        "operation": "transaction_save",
+        "details": {
+          "lines": 1,
+          "total_minor": 300000,
+          "paid_minor": 250000,
+          "payment_status": "partial"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T18:40:50.841354Z",
+        "level": "info",
+        "message": "sale saved",
+        "category": "transaction",
+        "operation": "transaction_save",
+        "details": {
+          "lines": 1,
+          "total_minor": 50000,
+          "paid_minor": 50000,
+          "payment_status": "paid"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T18:42:07.615219Z",
+        "level": "info",
+        "message": "SQLite database opened",
+        "category": "database",
+        "operation": "database_open"
+      },
+      {
+        "timestamp": "2026-08-26T18:42:07.617248Z",
+        "level": "info",
+        "message": "application started",
+        "category": "lifecycle",
+        "operation": "app_start"
+      },
+      {
+        "timestamp": "2026-08-26T18:42:07.642174Z",
+        "level": "info",
+        "message": "package info captured",
+        "category": "lifecycle",
+        "operation": "package_info",
+        "details": {
+          "version": "0.1.0",
+          "build_number": "1"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T18:43:15.889781Z",
+        "level": "info",
+        "message": "export saved",
+        "category": "export",
+        "operation": "export_userData",
+        "details": {
+          "file": "songjog_data_20260826_184315.json",
+          "mime_type": "application/json"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T18:43:36.308758Z",
+        "level": "info",
+        "message": "share dispatched",
+        "category": "export",
+        "operation": "share_export",
+        "details": {
+          "file": "songjog_data_20260826_184315.json"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T18:43:38.911186Z",
+        "level": "info",
+        "message": "export saved",
+        "category": "export",
+        "operation": "export_diagnostic",
+        "details": {
+          "file": "songjog_diagnostics_20260826_184338.json",
+          "mime_type": "application/json"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T18:43:52.983626Z",
+        "level": "info",
+        "message": "share dispatched",
+        "category": "export",
+        "operation": "share_export",
+        "details": {
+          "file": "songjog_diagnostics_20260826_184338.json"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T18:43:56.741040Z",
+        "level": "warning",
+        "message": "controlled test diagnostic event (requested from settings)",
+        "category": "other",
+        "operation": "test_event"
+      },
+      {
+        "timestamp": "2026-08-26T18:47:43.819572Z",
+        "level": "info",
+        "message": "sale saved",
+        "category": "transaction",
+        "operation": "transaction_save",
+        "details": {
+          "lines": 2,
+          "total_minor": 1235800,
+          "paid_minor": 250000,
+          "payment_status": "partial"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T18:49:09.208512Z",
+        "level": "warning",
+        "message": "controlled test diagnostic event (requested from settings)",
+        "category": "other",
+        "operation": "test_event"
+      },
+      {
+        "timestamp": "2026-08-26T18:49:10.152291Z",
+        "level": "info",
+        "message": "export saved",
+        "category": "export",
+        "operation": "export_userData",
+        "details": {
+          "file": "songjog_data_20260826_184910.json",
+          "mime_type": "application/json"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T18:49:12.707961Z",
+        "level": "info",
+        "message": "export saved",
+        "category": "export",
+        "operation": "export_userData",
+        "details": {
+          "file": "songjog_data_20260826_184912.json",
+          "mime_type": "application/json"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T18:49:15.222125Z",
+        "level": "info",
+        "message": "export saved",
+        "category": "export",
+        "operation": "export_userData",
+        "details": {
+          "file": "songjog_data_20260826_184915.json",
+          "mime_type": "application/json"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T18:49:38.524142Z",
+        "level": "info",
+        "message": "share dispatched",
+        "category": "export",
+        "operation": "share_export",
+        "details": {
+          "file": "songjog_data_20260826_184910.json"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T18:49:40.324286Z",
+        "level": "info",
+        "message": "export saved",
+        "category": "export",
+        "operation": "export_diagnostic",
+        "details": {
+          "file": "songjog_diagnostics_20260826_184940.json",
+          "mime_type": "application/json"
+        }
+      },
+      {
+        "timestamp": "2026-08-26T18:49:48.270902Z",
+        "level": "info",
+        "message": "export saved",
+        "category": "export",
+        "operation": "export_diagnostic",
+        "details": {
+          "file": "songjog_diagnostics_20260826_184948.json",
+          "mime_type": "application/json"
+        }
+      }
+    ]
+  }
+}

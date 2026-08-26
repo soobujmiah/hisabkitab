@@ -1,0 +1,110 @@
+{
+  "manifest": {
+    "schema_version": 1,
+    "created_at": "2026-08-26T18:49:10.139730Z",
+    "kind": "user_data",
+    "sections": [
+      "business_profile",
+      "transactions",
+      "transaction_lines"
+    ]
+  },
+  "business_profile": {
+    "id": "1787769415686349",
+    "name": "Green It",
+    "workspace_kind": "business",
+    "business_type": "computerMobileService",
+    "subtype": null,
+    "phone": "01617040846",
+    "address": "Savar"
+  },
+  "transactions": [
+    {
+      "id": "1787770063712105",
+      "type": "sale",
+      "created_at": "2026-08-26T18:47:43.712Z",
+      "customer_id": null,
+      "reference": null,
+      "note": null,
+      "payment_status": "partial",
+      "payment_method": "cash",
+      "paid_minor": 250000,
+      "lines": [
+        {
+          "id": "1787770063712105-0",
+          "description": "jdjd",
+          "quantity": 1.0,
+          "selling_price_minor": 282800,
+          "actual_cost_minor": null
+        },
+        {
+          "id": "1787770063712105-1",
+          "description": "bdydud",
+          "quantity": 1.0,
+          "selling_price_minor": 953000,
+          "actual_cost_minor": null
+        }
+      ]
+    },
+    {
+      "id": "1787769650785850",
+      "type": "sale",
+      "created_at": "2026-08-26T18:40:50.785Z",
+      "customer_id": null,
+      "reference": null,
+      "note": null,
+      "payment_status": "paid",
+      "payment_method": "cash",
+      "paid_minor": 50000,
+      "lines": [
+        {
+          "id": "1787769650785850-0",
+          "description": "#s",
+          "quantity": 1.0,
+          "selling_price_minor": 50000,
+          "actual_cost_minor": null
+        }
+      ]
+    },
+    {
+      "id": "1787769506925370",
+      "type": "sale",
+      "created_at": "2026-08-26T18:38:26.925Z",
+      "customer_id": null,
+      "reference": null,
+      "note": null,
+      "payment_status": "partial",
+      "payment_method": "cash",
+      "paid_minor": 250000,
+      "lines": [
+        {
+          "id": "1787769506925370-0",
+          "description": "hdd",
+          "quantity": 2.0,
+          "selling_price_minor": 150000,
+          "actual_cost_minor": null
+        }
+      ]
+    },
+    {
+      "id": "1787769477188845",
+      "type": "sale",
+      "created_at": "2026-08-26T18:37:57.188Z",
+      "customer_id": null,
+      "reference": null,
+      "note": null,
+      "payment_status": "paid",
+      "payment_method": "cash",
+      "paid_minor": 250000,
+      "lines": [
+        {
+          "id": "1787769477188845-0",
+          "description": "Ssd",
+          "quantity": 1.0,
+          "selling_price_minor": 250000,
+          "actual_cost_minor": null
+        }
+      ]
+    }
+  ]
+}

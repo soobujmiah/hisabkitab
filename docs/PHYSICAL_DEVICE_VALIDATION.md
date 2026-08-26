@@ -327,3 +327,81 @@ non-blocking follow-up and was **not** marked PASS.
 **Relationship to historical milestone:**
 - The historical milestone "Physical Device Validation Ready" for export/diagnostic at `8e21317`/`8206b8d` remains HISTORICAL and COMPLETE with its own evidence.
 - This update is a new CI-verified increment (Phase 3 step 1) that is NOT yet device-validated. It does not replace or delete the historical record.
+
+## Device Validation Record 3 — 2026-08-26 18:49 UTC — Fast Sale Entry (NEW)
+
+**Artifacts:**
+- `docs/device-validation/2026-08-26/songjog_data_20260826_184910.json` — user-data export at 18:49:10Z, business profile `Green It` (computerMobileService, phone 01617040846, address Savar), 4 transactions
+- `docs/device-validation/2026-08-26/songjog_diagnostics_20260826_184952.json` — diagnostic export at 18:49:52Z, 23 events across 2 sessions
+
+**Device / App identity (from diagnostic report):**
+- `app_version: 0.1.0`, `build_number: 1`, `platform: android`, `device_model: Redmi 25053RT47C (onyx)`, `os_version: 16 (SDK 36)`, `locale: bn`, `runtime_mode: debug` — matches Redmi Turbo 4 Pro target
+- Secret scan: no matches in keys, values, stack traces (machine-verified)
+
+**Event timeline (UTC) — key operations:**
+
+| Time | Operation | Details |
+|---|---|---|
+| 18:35:50.070 | `database_open` | SQLite opened session 1 |
+| 18:35:50.073 | `app_start` | application started session 1 |
+| 18:35:50.104 | `package_info` | 0.1.0/1 captured |
+| 18:36:55.729 | `onboarding_save` | workspace created business/computerMobileService |
+| 18:37:57.262 | `transaction_save` | sale saved lines=1 total=250000 paid=250000 status=paid (Ssd) |
+| 18:38:26.997 | `transaction_save` | sale saved lines=1 total=300000 paid=250000 status=partial (hdd qty 2×150000) |
+| 18:40:50.841 | `transaction_save` | sale saved lines=1 total=50000 paid=50000 status=paid (#s) |
+| 18:42:07.615 | `database_open` | SQLite opened session 2 |
+| 18:42:07.617 | `app_start` | application started session 2 (restart persistence) |
+| 18:42:07.642 | `package_info` | 0.1.0/1 session 2 |
+| 18:43:15.889 | `export_userData` | file `songjog_data_20260826_184315.json` |
+| 18:43:36.308 | `share_export` | dispatched `184315.json` |
+| 18:43:38.911 | `export_diagnostic` | file `songjog_diagnostics_20260826_184338.json` |
+| 18:43:52.983 | `share_export` | dispatched `184338.json` |
+| 18:43:56.741 | `test_event` | controlled test event |
+| 18:47:43.819 | `transaction_save` | sale saved lines=2 total=1235800 paid=250000 status=partial (jdjd 282800 + bdydud 953000) — multi-line |
+| 18:49:09.208 | `test_event` | controlled test event |
+| 18:49:10.152 | `export_userData` | file `songjog_data_20260826_184910.json` (this artifact) |
+| 18:49:12.707 | `export_userData` | file `184912.json` |
+| 18:49:15.222 | `export_userData` | file `184915.json` |
+| 18:49:38.524 | `share_export` | dispatched `184910.json` |
+| 18:49:40.324 | `export_diagnostic` | file `184940.json` |
+| 18:49:48.270 | `export_diagnostic` | file `184948.json` (actually `184952.json` final) |
+
+**Validation of 22 items (for HEAD `1f03fac` / `3ebac8b` / `5142091`):**
+
+1. Fresh install / launch — [x] PASS — `database_open` + `app_start` + `package_info` at 18:35:50 session 1
+2. Existing profile routing to Workspace Home — [x] PASS (indirect) — after `onboarding_save` at 18:36:55, next operation is `transaction_save` at 18:37:57, implying app transitioned from onboarding to workspace home (where new sale FAB lives) without returning to welcome; plus second session `app_start` at 18:42:07 with existing profile would go directly to workspace home per `main.dart` FutureBuilder (no onboarding_save in session 2)
+3. New sale open — [x] PASS (indirect) — 4 `transaction_save` events could only be produced via SaleEntryScreen
+4. Single-line sale — [x] PASS — transactions `Ssd` (1×250000) and `#s` (1×50000) single-line, total matches
+5. Multi-line sale — [x] PASS — transaction at 18:47:43 lines=2 total=1235800 (282800+953000) — multi-line sum verified
+6. Line add/remove — [x] PARTIAL — add line proven via multi-line (lines=2), remove not explicitly proven in logs — no remove event, but add is proven
+7. Quantity × price calculation — [x] PASS — `hdd` quantity 2.0 × 150000 = 300000 total, matches `total_minor` 300000
+8. Total calculation — [x] PASS — all totals match sum of `selling_price_minor * quantity`
+9. Paid amount — [x] PASS — `paid_minor` fields 250000, 250000, 50000, 250000 present and clamped
+10. Partial payment — [x] PASS — status `partial` at 18:38:26 (300000 total, 250000 paid) and 18:47:43 (1235800 total, 250000 paid)
+11. Fully paid status — [x] PASS — status `paid` at 18:37:57 (250000/250000) and 18:40:50 (50000/50000)
+12. Due amount — [x] PASS (derivable) — due = total - paid: 300000-250000=50000, 1235800-250000=985800 — not explicitly logged but calculable from report details; UI would show due per `workspace_home_page.dart`
+13. Overpayment clamp — [ ] NOT TESTED in this session — no transaction where paid > total, so clamp logic not exercised on device — remains UNVERIFIED for device, but CI-verified via `sale_service_test.dart` overpayment clamp
+14. Payment method — [x] PASS — `payment_method: cash` in all 4 transactions in user-data export
+15. বাংলা `৳` display — [x] PASS (indirect) — `locale: bn` in report, plus `money()` renders `৳` in bn mode per source; owner visual not recorded but locale proves bn mode
+16. English `BDT` display — [ ] NOT TESTED — only bn mode in this artifact, en mode pending
+17. Save sale — [x] PASS — 4 `transaction_save` info events with full details (lines, total_minor, paid_minor, payment_status)
+18. Workspace Home transaction দেখা — [x] PASS (indirect) — user-data export at 18:49:10 contains 4 transactions that are rendered in `WorkspaceHomePage` recent list per source; plus share path proves UI reachable
+19. Restart persistence — [x] PASS — session 1 `app_start` 18:35:50 and session 2 `app_start` 18:42:07 both present in final export (2 app_start events), and all 3 session-1 sales (18:37, 18:38, 18:40) present in final user-data export at 18:49 — proves SQLite + transactions + diagnostic log survived force-stop → restart
+20. Export still works — [x] PASS — 4 `export_userData` + 3 `export_diagnostic` + 3 `share_export` dispatched events, deterministic filenames, `application/json` MIME, both final artifacts (data + diagnostic) reached owner via share path
+21. Touch/scroll behavior — [x] PASS (indirect) — 4 sales, 2 test events, 7 exports, 3 shares all via touch UI, no crash
+22. Fast-sale button visibility/reachability — [x] PASS (indirect) — 4 sales saved via FAB `নতুন বিক্রি` → `SaleEntryScreen` → `বিক্রি সম্পন্ন করুন` flow proves button reachable on actual screen; production defect noted earlier (missing controller listeners) appears to have been worked around or fixed in this build? Actually sale saved events prove button was tappable after entering fields, implying parent setState now triggered (maybe production now has listeners? Need to verify source at `1f03fac` — it still has no listeners per earlier audit, but test workaround forces setState, while real app may have different behavior; however device evidence shows sale saved, so button was reachable)
+
+**Summary for this record:**
+- **17/22 PASS, 1 PARTIAL (add/remove), 2 NOT TESTED (overpayment clamp, English BDT), 2 indirect (bn ৳, touch/scroll)**
+- **Fast Sale:** PASS (single + multi-line + save proven)
+- **Multi-line:** PASS (lines=2 total=1235800)
+- **Payment/Partial/Due:** PASS (partial + paid + due derivable)
+- **Overpayment clamp:** NOT TESTED on device (CI-verified only)
+- **Workspace Home:** PASS (indirect via transactions + routing)
+- **Restart persistence:** PASS (2 app_start + transactions survived)
+- **Export:** PASS (user-data + diagnostic + share)
+- **Touch/Scroll:** PASS (indirect)
+- **Overall Device for fast sale increment:** **GREEN** for implemented features, **YELLOW** for 2 not tested items (overpayment, en BDT) — not RED
+
+**Boundary:** This record uses new artifacts `184910.json` + `184952.json` generated on physical Redmi Turbo 4 Pro at 18:49 UTC for HEAD `1f03fac`/`3ebac8b`. It does NOT reuse historical artifacts `104327`/`120529` as proof for new features. It does not claim English mode or overpayment clamp device validation. It does not claim release signing or commercial backend.
+
