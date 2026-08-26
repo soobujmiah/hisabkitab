@@ -140,7 +140,10 @@ void main() {
     await buildServices();
   });
 
-  testWidgets('settings are reachable from the welcome page', (tester) async {
+  // A pre-existing workspace opens the app directly on the workspace home
+  // (no welcome page), from which settings remain reachable.
+  testWidgets('settings are reachable from the workspace home',
+      (tester) async {
     await tester.pumpWidget(SongjogApp(services: services));
     await tester.pumpAndSettle();
 

@@ -4,6 +4,7 @@ import '../../app/app_services.dart';
 import '../../l10n/app_text.dart';
 import '../onboarding/onboarding_screen.dart';
 import '../settings/settings_screen.dart';
+import '../workspace/workspace_home_page.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key, required this.services, this.locale = AppLocale.bangla});
@@ -24,6 +25,13 @@ class WelcomePage extends StatelessWidget {
       ),
     );
     if (completed == true && context.mounted) {
+      // A completed onboarding replaces the welcome page: the workspace
+      // home is where the owner works from here on.
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute<void>(
+          builder: (_) => WorkspaceHomePage(services: services, locale: locale),
+        ),
+      );
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(t('workspace_saved'))),
       );
