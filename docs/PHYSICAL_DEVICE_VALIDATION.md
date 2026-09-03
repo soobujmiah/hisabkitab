@@ -1,3 +1,7 @@
+> See `docs/ADB_FIRST_TESTING.md` for the control hierarchy this checklist should be driven
+> through: ADB/app-native control before a manual tap, wherever a step below can be done either
+> way.
+
 # Physical Device Validation — Milestone & Checklist
 
 **Milestone:** Physical Device Validation Ready
